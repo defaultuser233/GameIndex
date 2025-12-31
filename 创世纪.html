@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创世纪测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', '微软雅黑', sans-serif;
+            background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 50%, #f0f4ff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* 神圣背景光效 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.8) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.6) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* 主标题 - 神圣光辉效果 */
+        .main-title {
+            font-size: 2.8em;
+            color: #1e3a8a;
+            text-align: center;
+            margin: 30px 0 40px;
+            position: relative;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(30, 58, 138, 0.3);
+            animation: divineGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes divineGlow {
+            0% { text-shadow: 0 0 15px rgba(30, 58, 138, 0.3); }
+            100% { text-shadow: 0 0 25px rgba(30, 58, 138, 0.5), 0 0 40px rgba(59, 130, 246, 0.3); }
+        }
+
+        .main-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            border-radius: 2px;
+            animation: titleLine 2s ease-out;
+        }
+
+        @keyframes titleLine {
+            from { width: 0; }
+            to { width: 120px; }
+        }
+
+        /* 测试容器 */
+        .test-container {
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+        }
+
+        /* 进度条容器 */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 25px;
+            padding: 5px;
+            margin-bottom: 40px;
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.05),
+                inset 0 0 10px rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.4), 
+                transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 12px;
+            color: #4b5563;
+            font-size: 0.95em;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* 问题卡片 - 玻璃拟态效果 */
+        .question-card {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 
+                0 8px 32px rgba(31, 38, 135, 0.1),
+                inset 0 0 20px rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            display: none;
+            animation: cardAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.4) 0%, 
+                rgba(240, 244, 255, 0.2) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+                filter: blur(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        .question-card.active {
+            display: block;
+        }
+
+        .question-title {
+            font-size: 1.7em;
+            color: #1e3a8a;
+            margin-bottom: 35px;
+            text-align: center;
+            font-weight: 600;
+            line-height: 1.4;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .question-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            border-radius: 3px;
+        }
+
+        /* 选项样式 - 玻璃拟态 */
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(59, 130, 246, 0.1) 0%, 
+                rgba(147, 197, 253, 0.15) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+
+        .option:hover::before {
+            opacity: 1;
+        }
+
+        .option:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 12px 30px rgba(31, 38, 135, 0.15),
+                0 0 0 2px rgba(59, 130, 246, 0.3);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .option.selected {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.15);
+            box-shadow: 
+                0 8px 25px rgba(59, 130, 246, 0.2),
+                0 0 0 2px #3b82f6;
+            transform: translateY(-5px);
+        }
+
+        .option-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .option-text {
+            font-size: 1.15em;
+            color: #1e293b;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* 结果卡片 - 玻璃拟态 */
+        .result-card {
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 25px;
+            padding: 50px 40px;
+            box-shadow: 
+                0 15px 50px rgba(31, 38, 135, 0.15),
+                inset 0 0 25px rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            text-align: center;
+            display: none;
+            animation: divineReveal 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at top right, rgba(59, 130, 246, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at bottom left, rgba(147, 197, 253, 0.1) 0%, transparent 40%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes divineReveal {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+                filter: blur(10px);
+            }
+            50% {
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .result-icon {
+            font-size: 5.5em;
+            margin-bottom: 25px;
+            animation: iconPulse 2s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(30, 58, 138, 0.3);
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .result-title {
+            font-size: 2.4em;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-description {
+            font-size: 1.25em;
+            color: #334155;
+            line-height: 1.8;
+            margin-bottom: 35px;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            color: white;
+            border: none;
+            padding: 16px 45px;
+            font-size: 1.15em;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.6);
+        }
+
+        .restart-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.3) 50%,
+                transparent 70%
+            );
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .restart-btn:hover::after {
+            opacity: 1;
+            transform: rotate(45deg) translate(20%, 20%);
+        }
+
+        /* 神圣光芒装饰 */
+        .divine-light {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0.4;
+            z-index: -1;
+        }
+
+        .light-1 {
+            top: 10%;
+            left: 10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+            animation: float 8s infinite ease-in-out;
+            filter: blur(40px);
+        }
+
+        .light-2 {
+            bottom: 10%;
+            right: 10%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.6) 0%, transparent 70%);
+            animation: float 10s infinite ease-in-out reverse;
+            filter: blur(30px);
+        }
+
+        .light-3 {
+            top: 50%;
+            left: 5%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, transparent 70%);
+            animation: float 12s infinite ease-in-out;
+            filter: blur(25px);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20px, -20px) scale(1.05); }
+            50% { transform: translate(-10px, 20px) scale(0.95); }
+            75% { transform: translate(15px, 15px) scale(1.02); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2em;
+            }
+            
+            .question-card {
+                padding: 25px;
+            }
+            
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+
+            .result-title {
+                font-size: 2em;
+            }
+
+            .result-icon {
+                font-size: 4em;
+            }
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(30, 58, 138, 0.1);
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 人物图片样式 */
+        .character-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        /* 在现有 CSS 中添加以下优化 */
+        .question-card {
+            /* 确保硬件加速 */
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+        
+        .option {
+            /* 优化 GPU 加速 */
+            transform: translateZ(0);
+            will-change: transform, box-shadow;
+        }
+        
+        /* 添加这个类来管理过渡 */
+        .smooth-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* 优化动画性能 */
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98); /* 减小移动距离 */
+                filter: blur(2px); /* 减少模糊程度 */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+        
+        /* 优化选项动画 */
+        .option {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* 使用更平滑的缓动函数 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 神圣光芒装饰 -->
+    <div class="divine-light light-1"></div>
+    <div class="divine-light light-2"></div>
+    <div class="divine-light light-3"></div>
+
+    <h1 class="main-title">✨ 测测你最像创世纪中的谁？ ✨</h1>
+    
+    <div class="test-container">
+        <!-- 进度条 -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+            <div class="progress-text" id="progressText">问题 1 / 20</div>
+        </div>
+
+        <!-- 问题卡片容器 -->
+        <div id="questionContainer"></div>
+
+        <!-- 结果卡片 -->
+        <div class="result-card" id="resultCard">
+            <img id="resultImage" class="character-img" src="" alt="角色图片">
+            <div class="result-icon" id="resultIcon"></div>
+            <h2 class="result-title" id="resultTitle"></h2>
+            <p class="result-description" id="resultDescription"></p>
+            <button class="restart-btn" onclick="restartTest()">🔄 重新测试</button>
+        </div>
+    </div>
+
+    <script>
+        // 晨星神话人物数据库
+        const characters = {
+            "幻理·晨星": {
+                name: "幻理·晨星",
+                image: "Image_1765382124421.png",
+                description: "羣星閃耀兮天穹，妩紫嫣紅兮深林。水澤充沛兮豐收，欣哉神明兮庇佑。"
+            },
+            "墨元·晨星": {
+                name: "墨元·晨星",
+                image: "Image_1762352290473.png",
+                description: "审真判伪，裁善决恶"
+            },
+            "天涵·晨星": {
+                name: "天涵·晨星",
+                image: "Image_1762436005711.png",
+                description: "上帝说要有光，于是那些低等的野兽们便看到了朝阳。"
+            },
+            "由纪·晨星": {
+                name: "由纪·晨星",
+                image: "Image_1767100440403_303.jpg",
+                description: "这些地狱的罪人们，甚至还没有一本古典音乐舞剧有品位。"
+            },
+            "朝朝·晨星": {
+                name: "朝朝·晨星",
+                image: "Image_1767100882476_301.png",
+                description: "我在此庄严起誓，我此生不留余力维护云上圣殿，保留世界与知识的火种，死战不退，至死方休。"
+            },
+            "安铭修": {
+                name: "安铭修",
+                image: "Image_1767101136081_787.jpg",
+                description: "万物归一之时，我将成为这天地间唯一的至尊。"
+            },
+            "安瀚嘉": {
+                name: "安瀚嘉",
+                image: "Image_1765684061316.jpg",
+                description: "末日终将降临，上帝的时代终将灭亡"
+            },
+            "安祤钦": {
+                name: "安祤钦",
+                image: "Image_1765382124421.png",
+                description: "失去人性，会失去很多，失去本能，会丧失一切"
+            },
+            "玄冥": {
+                name: "玄冥",
+                image: "Image_1762436005711.png",
+                description: "人性，比圣经中记载的怪物更像怪物"
+            },
+            "孔舜秋": {
+                name: "孔舜秋",
+                image: "",
+                description: "你不会以为我只会说看剑吧"
+            },
+            "闰羲和": {
+                name: "闰羲和",
+                image: "Image_1767100882476_301.png",
+                description: "黄昏，沏一壶茶，赏一束花，静静看着落地窗上的鱼群游过海洋，没有比这更惬意的事了"
+            },
+            "空弦月": {
+                name: "空弦月",
+                image: "Image_1765684061316.jpg",
+                description: "这天家我还非硬闯不可了"
+            },
+            "蓝枫": {
+                name: "蓝枫",
+                image: "Image_1767101187566_924.jpg",
+                description: "普通的不能再普通"
+            },
+            "玖柒": {
+                name: "玖柒",
+                image: "Image_1765684061316.jpg",
+                description: "愿上帝能永远为世界带来幸福与快乐"
+            },
+            "寻语·晨星": {
+                name: "寻语·晨星",
+                image: "Image_1765684378277.jpg",
+                description: "向吾侍奉，你的每一句证词"
+            }
+        };
+
+        // 20道深度测试题
+        const questions = [
+            {
+                id: 1,
+                question: "在一个被遗忘的图书馆里，你发现了一本空白的书。当你触碰它时，文字开始浮现。这些文字是？",
+                options: [
+                    { text: "创造世界的法则与命名万物的咒语", value: "幻理·晨星" },
+                    { text: "审判善恶的绝对律令与裁决记录", value: "墨元·晨星" },
+                    { text: "记录所有被背叛与流放者的悲伤诗篇", value: "由纪·晨星" },
+                    { text: "首任天使留下的战争与和平编年史", value: "朝朝·晨星" }
+                ]
+            },
+            {
+                id: 2,
+                question: "当你面对一个无法被任何力量摧毁的物体时，你会认为它存在的意义是？",
+                options: [
+                    { text: "它是世界诞生时留下的最初之核", value: "幻理·晨星" },
+                    { text: "这是对审判者意志的最终考验", value: "墨元·晨星" },
+                    { text: "是叛逆者永远无法打破的牢笼象征", value: "由纪·晨星" },
+                    { text: "是保护世界的最后壁垒", value: "朝朝·晨星" }
+                ]
+            },
+            {
+                id: 3,
+                question: "如果时间是一条河流，而你发现这条河开始倒流，你的第一反应是？",
+                options: [
+                    { text: "检查河流的源头是否出现了裂痕", value: "幻理·晨星" },
+                    { text: "立即惩罚破坏时间法则的罪人", value: "天涵·晨星" },
+                    { text: "冷眼旁观，思考这混乱中的讽刺意味", value: "由纪·晨星" },
+                    { text: "寻找方法让河流回归正轨", value: "朝朝·晨星" }
+                ]
+            },
+            {
+                id: 4,
+                question: "在一场无法醒来的梦境中，你成为了另一个人。这个梦会持续多久？",
+                options: [
+                    { text: "直到你理解了孤独的本质", value: "幻理·晨星" },
+                    { text: "直到审判的钟声响起", value: "墨元·晨星" },
+                    { text: "永远，因为你已经接受了梦境即现实", value: "由纪·晨星" },
+                    { text: "瞬间，因为真实不容许虚幻长久", value: "朝朝·晨星" }
+                ]
+            },
+            {
+                id: 5,
+                question: "当你站在镜前，镜中的倒影对你露出了你不曾展现的笑容，你会？",
+                options: [
+                    { text: "试图理解这是否是你创造出的另一个自己", value: "幻理·晨星" },
+                    { text: "判断这个笑容是否对秩序构成威胁", value: "天涵·晨星" },
+                    { text: "意识到那是你伪装下的真实面容", value: "孔舜秋" },
+                    { text: "微笑回应，因为镜子不会说谎", value: "闰羲和" }
+                ]
+            },
+            {
+                id: 6,
+                question: "你发现了一个能实现任何愿望的圣杯，但代价是忘记最重要的人。你会？",
+                options: [
+                    { text: "放弃愿望，因为创造不应以遗忘为代价", value: "幻理·晨星" },
+                    { text: "毁掉圣杯，防止他人被诱惑", value: "天涵·晨星" },
+                    { text: "笑着拒绝，因为你早已忘记何为重要", value: "安祤钦" },
+                    { text: "接受代价，为大局做出牺牲", value: "朝朝·晨星" }
+                ]
+            },
+            {
+                id: 7,
+                question: "在一个没有光的世界里，你成为了唯一的光源。你会如何发出光芒？",
+                options: [
+                    { text: "微弱但温暖的光，吸引需要陪伴者", value: "幻理·晨星" },
+                    { text: "强烈而公正的光，照亮所有罪恶", value: "墨元·晨星" },
+                    { text: "间歇性闪烁的光，暗示你的不耐烦", value: "安祤钦" },
+                    { text: "永恒稳定的光，作为世界的灯塔", value: "寻语·晨星" }
+                ]
+            },
+            {
+                id: 8,
+                question: "当你发现所谓的正义其实是更大的不公正时，你会？",
+                options: [
+                    { text: "质疑整个正义体系的构建基础", value: "由纪·晨星" },
+                    { text: "愤怒地摧毁这个虚伪的系统", value: "安瀚嘉" },
+                    { text: "冷静地寻找真正的公正之道", value: "墨元·晨星" },
+                    { text: "接受矛盾，在灰色地带寻找平衡", value: "蓝枫" }
+                ]
+            },
+            {
+                id: 9,
+                question: "如果给你一次重置所有关系的机会，但会失去所有记忆，你会选择？",
+                options: [
+                    { text: "拒绝，因为即使痛苦也是创造的一部分", value: "幻理·晨星" },
+                    { text: "接受，认为这是净化罪恶的唯一方式", value: "天涵·晨星" },
+                    { text: "犹豫，因为不确定是否值得", value: "空弦月" },
+                    { text: "拒绝，但会悄悄改变某些细节", value: "孔舜秋" }
+                ]
+            },
+            {
+                id: 10,
+                question: "在一个所有人都在说谎的国度，说真话成为了最大的罪恶。你会？",
+                options: [
+                    { text: "坚持说真话，因为真实高于一切", value: "朝朝·晨星" },
+                    { text: "用谎言包装真相，以智取胜", value: "孔舜秋" },
+                    { text: "保持沉默，因为懒得参与这场游戏", value: "安祤钦" },
+                    { text: "用暴力让所有人闭嘴，建立新秩序", value: "安瀚嘉" }
+                ]
+            },
+            {
+                id: 11,
+                question: "当你发现你所信仰的神明竟然向你求助时，你的感受是？",
+                options: [
+                    { text: "困惑，因为创造者怎会需要被创造者的帮助", value: "幻理·晨星" },
+                    { text: "荣幸，这是对你公正性的最高认可", value: "墨元·晨星" },
+                    { text: "讽刺，终于看到了神明的软弱", value: "由纪·晨星" },
+                    { text: "平静，因为强弱本就相对", value: "闰羲和" }
+                ]
+            },
+            {
+                id: 12,
+                question: "你被赋予了一个不可能的使命：让所有人幸福。你会如何实现？",
+                options: [
+                    { text: "创造一个没有痛苦的世界，哪怕它是虚假的", value: "幻理·晨星" },
+                    { text: "审判并消除所有造成不幸的源头", value: "天涵·晨星" },
+                    { text: "接受这不可能，但会为每个个体的幸福努力", value: "闰羲和" },
+                    { text: "用信仰给予人们承受痛苦的力量", value: "玖柒" }
+                ]
+            },
+            {
+                id: 13,
+                question: "在一个必须选择牺牲一个人拯救一百人的情况下，你会？",
+                options: [
+                    { text: "拒绝选择，因为每个生命都至关重要", value: "幻理·晨星" },
+                    { text: "毫不犹豫执行，为了更大的善", value: "朝朝·晨星" },
+                    { text: "寻找让所有人都活下来的第三种方法", value: "孔舜秋" },
+                    { text: "让规则本身决定谁是牺牲者", value: "寻语·晨星" }
+                ]
+            },
+            {
+                id: 14,
+                question: "当你发现你可以操控他人的情感时，你会？",
+                options: [
+                    { text: "用这能力让世界充满爱与理解", value: "幻理·晨星" },
+                    { text: "净化所有负面情感，强制和平", value: "天涵·晨星" },
+                    { text: "懒得使用，因为情感太复杂", value: "安祤钦" },
+                    { text: "谨慎使用，因为自由意志不可侵犯", value: "寻语·晨星" }
+                ]
+            },
+            {
+                id: 15,
+                question: "在一个被遗忘的角落，你发现了一朵永远不会凋谢的花。你会？",
+                options: [
+                    { text: "让它留在那里，因为永恒不需要观众", value: "蓝枫" },
+                    { text: "研究它为何能超越时间法则", value: "幻理·晨星" },
+                    { text: "用它来证明永恒之爱的存在", value: "闰羲和" },
+                    { text: "警惕它可能带来的诅咒", value: "墨元·晨星" }
+                ]
+            },
+            {
+                id: 16,
+                question: "当你发现你的记忆被人为篡改过时，你的第一反应是？",
+                options: [
+                    { text: "愤怒，因为真实被亵渎了", value: "安瀚嘉" },
+                    { text: "好奇，想知道是谁做的", value: "空弦月" },
+                    { text: "冷静分析，寻找篡改的线索", value: "寻语·晨星" },
+                    { text: "无所谓，因为记忆本就不可靠", value: "安祤钦" }
+                ]
+            },
+            {
+                id: 17,
+                question: "在一个沉默的圣殿中，你听到了神的声音。这个声音在说什么？",
+                options: [
+                    { text: "创造与毁灭本是一体", value: "幻理·晨星" },
+                    { text: "审判即将降临", value: "天涵·晨星" },
+                    { text: "一切不过是一场戏", value: "孔舜秋" },
+                    { text: "保持信仰，继续前行", value: "玖柒" }
+                ]
+            },
+            {
+                id: 18,
+                question: "当你发现你可以预知所有人的死亡时，你会选择？",
+                options: [
+                    { text: "试图改变，哪怕违背命运", value: "朝朝·晨星" },
+                    { text: "接受命运，但尽力让过程更有意义", value: "闰羲和" },
+                    { text: "用这个能力建立新的秩序", value: "墨元·晨星" },
+                    { text: "懒得看，因为生死本就循环", value: "安祤钦" }
+                ]
+            },
+            {
+                id: 19,
+                question: "在一个倒影的世界里，你看到了无数个自己。哪一个才是真实的？",
+                options: [
+                    { text: "那个在创造的我", value: "幻理·晨星" },
+                    { text: "那个在审判的我", value: "墨元·晨星" },
+                    { text: "那个被流放的我", value: "由纪·晨星" },
+                    { text: "这个回答问题的我", value: "孔舜秋" }
+                ]
+            },
+            {
+                id: 20,
+                question: "当你站在世界的尽头，面前是虚无，背后是存在。你会迈出那一步吗？",
+                options: [
+                    { text: "不会，因为创造者有责任守护存在", value: "幻理·晨星" },
+                    { text: "会，因为探索未知是本性", value: "蓝枫" },
+                    { text: "无所谓，因为存在与虚无本就相同", value: "安祤钦" },
+                    { text: "会，因为首任天使从不畏惧", value: "朝朝·晨星" }
+                ]
+            }
+        ];
+        // ...（前面的 characters 和 questions 数据保持不变）
+    
+        let currentQuestion = 0;
+        let answers = {};
+        let isTransitioning = false; // 添加过渡状态锁
+    
+        // 初始化测试
+        function initTest() {
+            const container = document.getElementById('questionContainer');
+            container.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                if (index === 0) questionCard.classList.add('active');
+                
+                const optionsHtml = q.options.map(option => `
+                    <div class="option" data-value="${option.value.replace(/'/g, "\\'")}">
+                        <div class="option-content">
+                            <div class="option-text">${option.text}</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                questionCard.innerHTML = `
+                    <h2 class="question-title">${q.question}</h2>
+                    <div class="options-container">
+                        ${optionsHtml}
+                    </div>
+                `;
+                
+                container.appendChild(questionCard);
+            });
+            
+            // 使用事件委托而不是内联 onclick
+            document.getElementById('questionContainer').addEventListener('click', function(e) {
+                const option = e.target.closest('.option');
+                if (option && !isTransitioning) {
+                    const questionCard = option.closest('.question-card');
+                    const questionId = Array.from(document.querySelectorAll('.question-card')).indexOf(questionCard) + 1;
+                    const value = option.dataset.value;
+                    selectOption(questionId, value, option);
+                }
+            });
+            
+            updateProgress();
+        }
+    
+        // 选择选项
+        function selectOption(questionId, value, element) {
+            if (isTransitioning) return; // 防止重复点击
+            
+            isTransitioning = true;
+            
+            // 移除同一问题中其他选项的选中状态
+            const questionCard = element.closest('.question-card');
+            questionCard.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            
+            // 添加选中状态
+            element.classList.add('selected');
+            
+            // 存储答案
+            answers[questionId] = value;
+            
+            // 使用 requestAnimationFrame 确保动画流畅
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    if (currentQuestion < questions.length - 1) {
+                        nextQuestion();
+                    } else {
+                        // 增加一点延迟让选中效果完全显示
+                        setTimeout(() => {
+                            showResult();
+                            isTransitioning = false;
+                        }, 300);
+                    }
+                }, 500); // 减少延迟时间
+            });
+        }
+    
+        // 下一题
+        function nextQuestion() {
+            const questionCards = document.querySelectorAll('.question-card');
+            const currentCard = questionCards[currentQuestion];
+            
+            // 添加淡出效果
+            currentCard.style.opacity = '0';
+            currentCard.style.transform = 'translateY(-20px)';
+            
+            setTimeout(() => {
+                currentCard.classList.remove('active');
+                currentCard.style.opacity = '';
+                currentCard.style.transform = '';
+                
+                currentQuestion++;
+                
+                // 使用 requestAnimationFrame 确保流畅
+                requestAnimationFrame(() => {
+                    questionCards[currentQuestion].classList.add('active');
+                    updateProgress();
+                    
+                    // 滚动到新问题位置
+                    questionCards[currentQuestion].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                    
+                    // 重置过渡状态
+                    setTimeout(() => {
+                        isTransitioning = false;
+                    }, 100);
+                });
+            }, 300); // 减少动画时间
+        }
+    
+        // 更新进度条
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            const progressBar = document.getElementById('progressBar');
+            
+            // 使用 CSS transition 而不是直接设置 width
+            progressBar.style.transition = 'width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            progressBar.style.width = progress + '%';
+            
+            document.getElementById('progressText').textContent = `问题 ${currentQuestion + 1} / ${questions.length}`;
+        }
+    
+        // 显示结果
+        function showResult() {
+            // 计算得分
+            const scores = {};
+            Object.values(answers).forEach(value => {
+                scores[value] = (scores[value] || 0) + 1;
+            });
+            
+            // 找出最高分的人物
+            let maxScore = 0;
+            let resultChar = "幻理·晨星";
+            
+            Object.entries(scores).forEach(([char, score]) => {
+                if (score > maxScore) {
+                    maxScore = score;
+                    resultChar = char;
+                }
+            });
+            
+            const character = characters[resultChar];
+            
+            // 平滑隐藏问题卡片和进度条
+            const questionContainer = document.getElementById('questionContainer');
+            const progressContainer = document.querySelector('.progress-container');
+            
+            questionContainer.style.opacity = '0';
+            progressContainer.style.opacity = '0';
+            
+            setTimeout(() => {
+                questionContainer.style.display = 'none';
+                progressContainer.style.display = 'none';
+                
+                // 显示结果卡片
+                const resultCard = document.getElementById('resultCard');
+                const resultIcon = document.getElementById('resultIcon');
+                const resultTitle = document.getElementById('resultTitle');
+                const resultDescription = document.getElementById('resultDescription');
+                const resultImage = document.getElementById('resultImage');
+                
+                resultIcon.textContent = '🌟';
+                resultTitle.textContent = character.name;
+                resultDescription.textContent = character.description;
+                
+                // 设置角色图片
+                if (character.image) {
+                    resultImage.src = character.image;
+                    resultImage.style.display = 'block';
+                } else {
+                    resultImage.style.display = 'none';
+                }
+                
+                resultCard.style.display = 'block';
+                
+                // 滚动到结果位置
+                setTimeout(() => {
+                    resultCard.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }, 100);
+            }, 300);
+        }
+    
+        // 重新开始测试
+        function restartTest() {
+            // 平滑隐藏结果卡片
+            const resultCard = document.getElementById('resultCard');
+            resultCard.style.opacity = '0';
+            
+            setTimeout(() => {
+                // 重置状态
+                currentQuestion = 0;
+                answers = {};
+                isTransitioning = false;
+                
+                resultCard.style.display = 'none';
+                resultCard.style.opacity = '';
+                
+                // 显示问题容器和进度条
+                const questionContainer = document.getElementById('questionContainer');
+                const progressContainer = document.querySelector('.progress-container');
+                
+                questionContainer.style.display = 'block';
+                progressContainer.style.display = 'block';
+                
+                // 初始透明度设置为0，然后淡入
+                questionContainer.style.opacity = '0';
+                progressContainer.style.opacity = '0';
+                
+                // 重置所有问题卡片
+                const questionCards = document.querySelectorAll('.question-card');
+                questionCards.forEach((card, index) => {
+                    card.classList.remove('active');
+                    if (index === 0) {
+                        setTimeout(() => {
+                            card.classList.add('active');
+                        }, 50);
+                    }
+                    
+                    // 清除选项选中状态
+                    card.querySelectorAll('.option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                });
+                
+                // 更新进度
+                updateProgress();
+                
+                // 淡入效果
+                setTimeout(() => {
+                    questionContainer.style.opacity = '1';
+                    progressContainer.style.opacity = '1';
+                    
+                    // 滚动到顶部
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }, 100);
+            }, 300);
+        }
+    
+        // 页面加载完成后初始化测试
+        document.addEventListener('DOMContentLoaded', function() {
+            initTest();
+        });
+    </script>
+</body>
+</html>
