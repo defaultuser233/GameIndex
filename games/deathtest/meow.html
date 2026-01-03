@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>喵喵喵·B站播放器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        :root {
+            --bg: #1e1e2f;
+            --card: #2a2a3e;
+            --accent: #00c3ff;
+            --accent-hover: #00a2d3;
+            --text: #f0f0f5;
+            --radius: 12px;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            --font: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: linear-gradient(135deg, var(--bg) 0%, #121220 100%);
+            color: var(--text);
+            font-family: var(--font);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            user-select: none;
+            /* 呼吸灯特效 */
+            animation: breathe 2.5s ease-in-out infinite;
+        }
+        /* 呼吸灯关键帧 */
+        @keyframes breathe {
+            0%, 100% {
+                text-shadow:
+                    0 0 2px var(--accent),
+                    0 0 5px var(--accent),
+                    0 0 10px var(--accent);
+                opacity: 0.85;
+            }
+            50% {
+                text-shadow:
+                    0 0 5px var(--accent),
+                    0 0 15px var(--accent),
+                    0 0 30px var(--accent);
+                opacity: 1;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        input[type="text"] {
+            flex: 1 1 240px;
+            padding: 12px 16px;
+            border: 2px solid transparent;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            background: #232335;
+            color: var(--text);
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius);
+            background: var(--accent);
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+        .player-wrap {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 */
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: #000;
+        }
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        footer {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #888;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>喵喵喵 · B站播放器</h1>
+
+        <div class="input-group">
+            <input id="bvInput" type="text" placeholder="输入BV号，如：BV1GJ411x7h7" />
+            <button onclick="loadVideo()">播放</button>
+        </div>
+
+        <div class="player-wrap">
+            <iframe id="player"
+                    src="https://player.bilibili.com/player.html?isOutside=true&aid=80433022&bvid=BV1GJ411x7h7&cid=137649199&p=1"
+                    allowfullscreen>
+            </iframe>
+        </div>
+
+        <footer>Tips：支持BV号格式：BV1GJ411x7h7</footer>
+    </div>
+
+    <script>
+        const defaultBV = 'BV1GJ411x7h7';
+        const player = document.getElementById('player');
+        const bvInput = document.getElementById('bvInput');
+
+        function loadVideo() {
+            let bv = bvInput.value.trim();
+            if (!bv) bv = defaultBV;
+            // 使用正则表达式校验BV号格式
+            if (!/^BV[a-zA-Z0-9]{10}$/.test(bv)) {
+                alert('BV号格式不正确！示例：BV1GJ411x7h7');
+                return;
+            }
+            player.src = `https://player.bilibili.com/player.html?isOutside=true&bvid=${bv}&p=1`;
+        }
+
+        // 回车快捷播放
+        bvInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter') loadVideo();
+        });
+    </script>
+</body>
+</html>

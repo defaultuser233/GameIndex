@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>超级冒险游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #001a33;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .game-container {
+            text-align: center;
+            position: relative;
+        }
+
+        .game-title {
+            font-size: 48px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5); }
+            to { text-shadow: 3px 3px 20px rgba(255, 255, 255, 0.5); }
+        }
+
+        .game-hint {
+            font-size: 20px;
+            color: #cccccc;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
+
+        .start-button {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.4);
+        }
+
+        .start-button:hover {
+            background-color: #ff6666;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 68, 68, 0.6);
+        }
+
+        .start-button:active {
+            transform: translateY(0);
+        }
+
+        .victory-screen {
+            display: none;
+            color: white;
+        }
+
+        .victory-title {
+            font-size: 36px;
+            color: #ffd700;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInSlideDown 1s ease-out forwards;
+        }
+
+        .credits {
+            font-size: 18px;
+            line-height: 1.8;
+            opacity: 0;
+        }
+
+        .credits p {
+            margin: 10px 0;
+            animation: fadeInSlideUp 1s ease-out forwards;
+        }
+
+        .credits p:nth-child(1) { animation-delay: 0.5s; }
+        .credits p:nth-child(2) { animation-delay: 0.7s; }
+        .credits p:nth-child(3) { animation-delay: 0.9s; }
+        .credits p:nth-child(4) { animation-delay: 1.1s; }
+
+        @keyframes fadeInSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div id="startScreen" class="start-screen">
+            <h1 class="game-title">超级冒险游戏</h1>
+            <p class="game-hint">准备开始你的冒险之旅！</p>
+            <button class="start-button" onclick="startGame()">开始游戏</button>
+        </div>
+        
+        <div id="victoryScreen" class="victory-screen">
+            <h2 class="victory-title">🎉 恭喜你通关了！🎉</h2>
+            <div class="credits">
+                <p>🎮 游戏策划：超级冒险团队</p>
+                <p>💻 程序开发：前端魔法师</p>
+                <p>🎨 美术设计：创意工作室</p>
+                <p>🙏 感谢你的参与！</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 创建音频上下文用于播放音效
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playVictorySound() {
+            // 创建简单的胜利音效
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // 设置音效参数
+            oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+            oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+            oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+        
+        function startGame() {
+            // 淡出开始界面
+            const startScreen = document.getElementById('startScreen');
+            startScreen.classList.add('fade-out');
+            
+            // 延迟后显示胜利界面和播放音效
+            setTimeout(() => {
+                startScreen.style.display = 'none';
+                const victoryScreen = document.getElementById('victoryScreen');
+                victoryScreen.style.display = 'block';
+                
+                // 播放胜利音效
+                playVictorySound();
+            }, 500);
+        }
+        
+        // 点击任意位置重新开始
+        document.addEventListener('click', function(e) {
+            const victoryScreen = document.getElementById('victoryScreen');
+            if (victoryScreen.style.display === 'block' && 
+                !e.target.classList.contains('start-button')) {
+                location.reload();
+            }
+        });
+    </script>
+</body>
+</html>

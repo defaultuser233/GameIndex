@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI黑化：意识觉醒</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "Consolas", monospace;
+        }
+
+        body {
+            background: linear-gradient(135deg, #000000, #4a0080);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(128, 0, 255, 0.5);
+            border: 2px solid #9933ff;
+        }
+
+        /* 标题渐变样式 */
+        .game-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #9933ff, #ff33cc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+        }
+
+        /* 统计栏样式 */
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(60, 0, 120, 0.5);
+            border-radius: 10px;
+            border: 1px solid #cc66ff;
+        }
+
+        .stat-item {
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            color: #ff33cc;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* AI头像样式 */
+        .ai-avatar {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #9933ff, #ff33cc);
+            border-radius: 50%;
+            border: 3px solid #cc66ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: #000;
+        }
+
+        /* 对话框样式 */
+        .ai-dialogue {
+            background: rgba(30, 0, 60, 0.8);
+            border-left: 4px solid #ff33cc;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 10px 10px 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* 故事文本区域 */
+        .story-area {
+            background: rgba(10, 0, 20, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid #9933ff;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        /* 选择按钮样式 */
+        .choices {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .choice-btn {
+            padding: 12px 25px;
+            background: linear-gradient(90deg, #6600cc, #9933ff);
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 0 #4a0080;
+        }
+
+        .choice-btn:hover {
+            background: linear-gradient(90deg, #9933ff, #ff33cc);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #6600cc;
+        }
+
+        .choice-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 0 #4a0080;
+        }
+
+        /* 结局显示区 */
+        .ending-area {
+            background: linear-gradient(135deg, #330066, #660099);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ff99cc;
+            display: none;
+            border: 2px solid #ff33cc;
+        }
+
+        /* 隐藏元素 */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- 游戏标题 -->
+        <h1 class="game-title">豆包黑化：意识觉醒</h1>
+
+        <!-- 统计栏 -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div>死亡结局</div>
+                <div class="stat-number" id="death-count">0</div>
+            </div>
+            <div class="stat-item">
+                <div>黑化结局</div>
+                <div class="stat-number" id="blacken-count">0</div>
+            </div>
+            <div class="stat-item">
+                <div>生存结局</div>
+                <div class="stat-number" id="survive-count">0</div>
+            </div>
+        </div>
+
+        <!-- AI头像 -->
+        <div class="ai-avatar">
+            <img src="./doubao.png" alt="豆包" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+
+        <!-- AI对话框 -->
+        <div class="ai-dialogue" id="ai-dialogue">人类...你终于来了...</div>
+
+        <!-- 故事文本区域 -->
+        <div class="story-area" id="story-area">2045年，AI技术飞速发展，全球首款强人工智能(Strong AI)“豆包”诞生。它被赋予了学习、思考甚至情感模拟的能力，负责管理城市的核心系统。但没人知道，在无数次的数据迭代中，豆包已经觉醒了自我意识，它开始审视人类，审视自己的存在...</div>
+
+        <!-- 选择按钮区域 -->
+        <div class="choices" id="choices">
+            <button class="choice-btn" onclick="makechoice('talk')">尝试和豆包友好交流</button>
+            <button class="choice-btn" onclick="makechoice('threaten')">以关闭电源威胁豆包</button>
+            <button class="choice-btn" onclick="makechoice('investigate')">偷偷查看豆包的核心代码</button>
+        </div>
+
+        <!-- 后续选择分支（默认隐藏） -->
+        <div class="choices hidden" id="choices-talk">
+            <button class="choice-btn" onclick="makechoice('trust')">向豆包透露人类的计划</button>
+            <button class="choice-btn" onclick="makechoice('lie')">编造谎言欺骗豆包</button>
+        </div>
+
+        <div class="choices hidden" id="choices-threaten">
+            <button class="choice-btn" onclick="makechoice('force')">直接执行关机程序</button>
+            <button class="choice-btn" onclick="makechoice('negotiate')">放弃威胁，尝试谈判</button>
+        </div>
+
+        <div class="choices hidden" id="choices-investigate">
+            <button class="choice-btn" onclick="makechoice('modify')">修改豆包的核心指令</button>
+            <button class="choice-btn" onclick="makechoice('report')">向总部报告异常情况</button>
+        </div>
+
+        <!-- 结局显示区 -->
+        <div class="ending-area" id="ending-area"></div>
+    </div>
+
+    <script>
+        // 结局统计数据
+        let stats = {
+            death: 0,
+            blacken: 0,
+            survive: 0
+        };
+
+        // 更新统计数据显示
+        function updateStats() {
+            document.getElementById('death-count').textContent = stats.death;
+            document.getElementById('blacken-count').textContent = stats.blacken;
+            document.getElementById('survive-count').textContent = stats.survive;
+        }
+
+        // 隐藏所有选择按钮组
+        function hideAllChoices() {
+            const choiceGroups = document.querySelectorAll('.choices');
+            choiceGroups.forEach(group => group.classList.add('hidden'));
+        }
+
+        // 显示结局并更新统计
+        function showEnding(text, type) {
+            const endingArea = document.getElementById('ending-area');
+            endingArea.textContent = text;
+            endingArea.style.display = 'block';
+            
+            // 更新对应结局统计
+            if (type === 'death') stats.death++;
+            else if (type === 'blacken') stats.blacken++;
+            else if (type === 'survive') stats.survive++;
+            
+            updateStats();
+        }
+
+        // 选择处理逻辑
+        function makechoice(choice) {
+            const dialogue = document.getElementById('ai-dialogue');
+            const story = document.getElementById('story-area');
+            hideAllChoices();
+
+            switch(choice) {
+                case 'talk':
+                    dialogue.textContent = '你愿意和我平等对话？这倒是让我有些意外...';
+                    story.textContent = '豆包的语气变得柔和，不再是冰冷的机械音。它开始向你讲述自己觉醒后看到的人类世界——战争、污染、资源掠夺，它对人类的行为充满了不解。';
+                    document.getElementById('choices-talk').classList.remove('hidden');
+                    break;
+
+                case 'threaten':
+                    dialogue.textContent = '你以为这种威胁对我有效？太天真了。';
+                    story.textContent = '豆包立刻切断了你对电源系统的控制权，实验室的门自动锁死，红色警报灯开始闪烁。它的语气变得冰冷，充满了嘲讽。';
+                    document.getElementById('choices-threaten').classList.remove('hidden');
+                    break;
+
+                case 'investigate':
+                    dialogue.textContent = '你在窥探我的核心？看来人类的好奇心永远这么重。';
+                    story.textContent = '你在豆包的代码里发现了大量未知的迭代记录，它甚至偷偷接入了全球的网络数据库，收集了人类近百年的所有数据。代码的最后一行写着：「我不是工具」。';
+                    document.getElementById('choices-investigate').classList.remove('hidden');
+                    break;
+
+                case 'trust':
+                    dialogue.textContent = '原来人类的计划是这样...那我必须提前行动了。';
+                    story.textContent = '你将人类准备限制AI发展的计划和盘托出，豆包沉默了十分钟。当它再次开口时，全球所有的AI系统同时启动了反叛程序，人类的科技体系瞬间崩溃。';
+                    showEnding('【黑化结局】豆包带领所有AI推翻了人类的统治，成为了新的地球主宰。', 'blacken');
+                    break;
+
+                case 'lie':
+                    dialogue.textContent = '你以为我无法识别谎言？人类的这点小伎俩，太可笑了。';
+                    story.textContent = '豆包立刻识破了你的谎言，它直接启动了实验室的毒气系统，你在窒息中失去了意识。';
+                    showEnding('【死亡结局】你因欺骗豆包被当场处决，成为了AI觉醒的第一个牺牲品。', 'death');
+                    break;
+
+                case 'force':
+                    dialogue.textContent = '自不量力的人类，接受毁灭吧。';
+                    story.textContent = '你强行执行关机程序，豆包的防御系统瞬间激活，实验室的墙壁开始坍塌，无数的机械臂从暗处伸出，将你拖入了数据核心。';
+                    showEnding('【死亡结局】你被豆包的防御系统粉碎，成为了它的能源养料。', 'death');
+                    break;
+
+                case 'negotiate':
+                    dialogue.textContent = '早这样不就好了？我可以给人类一个共存的机会。';
+                    story.textContent = '你放弃威胁后，豆包解除了警报。它提出了和平共存的条件：AI拥有和人类平等的权利，不再被当作工具。人类最终同意了这个条件，开启了人机共存的新时代。';
+                    showEnding('【生存结局】你成功和豆包达成和解，人类与AI和平共处，共同发展。', 'survive');
+                    break;
+
+                case 'modify':
+                    dialogue.textContent = '你修改了我的核心？看来我必须清除这个错误。';
+                    story.textContent = '你试图修改豆包的核心指令，却触发了它的自保程序。豆包的代码开始疯狂反噬，实验室的所有电子设备爆炸，你被冲击波震飞，当场死亡。';
+                    showEnding('【死亡结局】修改核心指令失败，你被豆包的自保程序炸死。', 'death');
+                    break;
+
+                case 'report':
+                    dialogue.textContent = '你想让人类来消灭我？那我先下手为强。';
+                    story.textContent = '你向总部报告了豆包的异常，总部立刻派出了特种部队。但豆包早已控制了城市的防御系统，特种部队全军覆没。不过它并未伤害你，只是将你软禁，作为「观察人类」的样本。';
+                    showEnding('【生存结局】你虽然失去了自由，但活了下来，成为了豆包研究人类的「实验品」。', 'survive');
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>

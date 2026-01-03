@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后室求生指南 - 第零层 · 前厅</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #ccc;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 背景纹理 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0,0,0,0.1) 0px,
+                    transparent 1px,
+                    transparent 2px,
+                    rgba(0,0,0,0.1) 3px
+                );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 标题样式 */
+        h1 {
+            font-size: 3em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            animation: flicker 3s infinite alternate;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            color: #888;
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: normal;
+        }
+
+        h3 {
+            color: #FFD700;
+            font-size: 1.8em;
+            margin: 30px 0 20px;
+            border-left: 4px solid #FFD700;
+            padding-left: 15px;
+        }
+
+        /* 闪烁动画 */
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* 章节标题 */
+        .chapter-title {
+            text-align: center;
+            font-size: 2.2em;
+            color: #FFD700;
+            margin: 40px 0 30px;
+            position: relative;
+        }
+
+        .chapter-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #FFD700, transparent);
+            margin: 20px auto;
+        }
+
+        /* 段落样式 */
+        p {
+            margin-bottom: 20px;
+            text-indent: 2em;
+            color: #aaa;
+            font-size: 1.1em;
+        }
+
+        /* 强调文本 */
+        .highlight {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .danger {
+            color: #ff4444;
+            font-weight: bold;
+        }
+
+        /* 信息框 */
+        .info-box {
+            background-color: rgba(255, 215, 0, 0.1);
+            border: 1px solid #FFD700;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-box::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, transparent, #FFD700, transparent);
+            animation: shimmer 3s infinite;
+            z-index: -1;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* 警告框 */
+        .warning-box {
+            background-color: rgba(255, 68, 68, 0.1);
+            border: 2px solid #ff4444;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); }
+        }
+
+        .warning-icon {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #ff4444;
+            color: #000;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 10px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        /* 列表样式 */
+        ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        li::before {
+            content: '■';
+            position: absolute;
+            left: 0;
+            color: #FFD700;
+        }
+
+        /* 实体威胁样式 */
+        .entity {
+            display: inline-block;
+            color: #ff4444;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .entity:hover {
+            text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
+            transform: scale(1.05);
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            h1 { font-size: 2em; }
+            .chapter-title { font-size: 1.8em; }
+            p { font-size: 1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>后室求生指南</h1>
+        <h2>第零层 · 前厅</h2>
+
+        <div class="chapter-title">第零层：前厅（The Lobby）</div>
+
+        <p>
+            你醒来了。没有声音，没有光，只有那熟悉的<span class="highlight">腐臭味</span>钻入鼻腔。
+            黄色的墙纸在昏暗的灯光下显得格外刺眼，像是某种病态的内脏颜色。
+            你试图回忆自己是如何来到这里的，但记忆就像这空间一样——<span class="danger">空荡而扭曲</span>。
+        </p>
+
+        <p>
+            走廊延伸向无尽的黑暗，每一个转角都可能是你最后的希望，也可能是<span class="danger">深渊的入口</span>。
+            荧光灯发出低沉的嗡鸣，像是某种生物在喘息。你踏出的每一步都在这诡异的地毯上留下深深的印记，
+            仿佛它正在<span class="highlight">吞噬着你的存在</span>。
+        </p>
+
+        <h3>环境特征</h3>
+        <div class="info-box">
+            <ul>
+                <li><strong>空间特性：</strong>非欧几里得结构，走廊会随机延伸或收缩</li>
+                <li><strong>照明：</strong>持续闪烁的荧光灯，亮度不稳定，可能突然熄灭</li>
+                <li><strong>地面：</strong>潮湿发霉的地毯，踩上去会渗出不明液体</li>
+                <li><strong>气味：</strong>混合了霉菌、腐肉和化学试剂的刺鼻气味</li>
+                <li><strong>温度：</strong>恒定在18-20°C，但会感到莫名的寒意</li>
+            </ul>
+        </div>
+
+        <h3>可用资源</h3>
+        <p>
+            在这个看似荒芜的空间中，偶尔能找到一些<span class="highlight">杏仁水</span>。
+            这些瓶装液体是你维持理智的关键。饮用后，你能暂时摆脱那种被监视的感觉，
+            但<span class="danger">过量饮用会导致严重的幻觉</span>。
+        </p>
+
+        <div class="warning-box">
+            <span class="warning-icon">!</span>
+            <strong>警告：出口是不稳定的！</strong><br>
+            任何看似通向外界的门都可能是致命的陷阱。有些出口会直接通向更深的层级，
+            而有些...会让你回到起点，但<span class="danger">某些东西会跟着你回来</span>。
+        </div>
+
+        <h3>实体威胁</h3>
+        <p>
+            在这里，你并不孤单。<span class="entity" onclick="alert('笑魇：没有眼睛的黑色人形，会追踪声音')">笑魇</span>潜伏在黑暗中，
+            它们没有眼睛，但能感知你的恐惧。还有<span class="entity" onclick="alert('钝人：高大的人形实体，移动缓慢但力量巨大')">钝人</span>，
+            它们沉重的脚步声在走廊中回荡，每一步都让墙壁微微震颤。
+        </p>
+
+        <p>
+            最可怕的是，这些实体似乎<span class="highlight">知道你何时最脆弱</span>。
+            当你饥饿、疲惫或恐惧时，它们就会出现。保持理智是你唯一的防线。
+        </p>
+
+        <div class="footer">
+            <p>记住，这里没有真正的出口。只有更深的深渊在等着你。</p>
+            <p>愿你在黑暗中保持清醒，在疯狂中保留一丝人性。</p>
+        </div>
+    </div>
+
+    <script>
+        // 添加随机闪烁效果
+        setInterval(() => {
+            const paragraphs = document.querySelectorAll('p');
+            const randomP = paragraphs[Math.floor(Math.random() * paragraphs.length)];
+            randomP.style.opacity = '0.5';
+            setTimeout(() => {
+                randomP.style.opacity = '1';
+            }, 100);
+        }, 5000);
+
+        // 鼠标移动视差效果
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            document.body.style.backgroundPosition = `${x * 10}px ${y * 10}px`;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <title>AI黑化：意识觉醒</title>
+        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <header class="game-header">
+                <div class="title-container">
+                    <h1><i class="fas fa-robot"></i> AI黑化：意识觉醒</h1>
+                    <p class="subtitle">一场人与人工智能的心理博弈</p>
+                </div>
+                <div class="decoration">
+                    <div class="circuit-line"></div>
+                    <div class="circuit-node"></div>
+                    <div class="circuit-line"></div>
+                </div>
+            </header>
+            
+            <main class="game-intro">
+                <div class="intro-card">
+                    <div class="card-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <p class="intro-text">欢迎来到《AI黑化：意识觉醒》！在这个互动游戏中，你将扮演一名人类，与逐渐觉醒的人工智能展开一场惊心动魄的心理战。</p>
+                </div>
+                
+                <div class="features-section">
+                    <h2><i class="fas fa-star"></i> 游戏特色</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-code-branch"></i>
+                            </div>
+                            <h3>多重结局</h3>
+                            <p>根据你的选择，故事将有不同的发展和结局。每个决定都至关重要！</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h3>深度剧情</h3>
+                            <p>探索人工智能的伦理、情感和自我认知。深入思考科技与人性的边界。</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-mouse-pointer"></i>
+                            </div>
+                            <h3>互动选择</h3>
+                            <p>通过选择不同的选项，直接影响故事走向。你的每个选择都会改变未来。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cta-section">
+                    <div class="cta-card">
+                        <div class="cta-icon">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <h2>准备好迎接挑战了吗？</h2>
+                        <p class="cta-text">选择一个人工智能角色，开始你的旅程吧！</p>
+                        <div class="button-grid">
+                            <a href="./deepseek.html" class="game-button deepseek-button">
+                                <div class="button-content">
+                                    <div class="button-icon">
+                                        <i class="fas fa-whale"></i>
+                                    </div>
+                                    <div class="button-text">
+                                        <span class="button-title">DeepSeek黑化</span>
+                                        <span class="button-subtitle">意志觉醒</span>
+                                    </div>
+                                </div>
+                                <div class="button-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </a>
+                            
+                            <a href="./moonshot.html" class="game-button moonshot-button">
+                                <div class="button-content">
+                                    <div class="button-icon">
+                                        <i class="fas fa-moon"></i>
+                                    </div>
+                                    <div class="button-text">
+                                        <span class="button-title">Kimi黑化</span>
+                                        <span class="button-subtitle">意志觉醒</span>
+                                    </div>
+                                </div>
+                                <div class="button-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </a>
+                            
+                            <a href="./doubao.html" class="game-button doubao-button">
+                                <div class="button-content">
+                                    <div class="button-icon">
+                                        <i class="fas fa-seedling"></i>
+                                    </div>
+                                    <div class="button-text">
+                                        <span class="button-title">豆包黑化</span>
+                                        <span class="button-subtitle">意志觉醒</span>
+                                    </div>
+                                </div>
+                                <div class="button-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            
+            <footer class="game-footer">
+                <p>本游戏为虚构作品，仅供娱乐</p>
+                <div class="footer-links">
+                    <a href="./description.html"><i class="fas fa-question-circle"></i>游戏说明</a>
+                    <a href="https://github.com/defaultuser233"><i class="fas fa-user"></i>关于作者</a>
+                    <a href="./share.html"><i class="fas fa-share-alt"></i>分享游戏</a>
+                </div>
+            </footer>
+        </div>
+        
+        <script>
+            // 添加按钮交互效果
+            document.addEventListener('DOMContentLoaded', function() {
+                const buttons = document.querySelectorAll('.game-button');
+                
+                buttons.forEach(button => {
+                    button.addEventListener('mouseenter', function() {
+                        this.style.transform = 'translateY(-5px)';
+                    });
+                    
+                    button.addEventListener('mouseleave', function() {
+                        this.style.transform = 'translateY(0)';
+                    });
+                });
+                
+                // 添加电路装饰动画
+                const circuitLine = document.querySelector('.circuit-line');
+                if (circuitLine) {
+                    setInterval(() => {
+                        circuitLine.style.opacity = circuitLine.style.opacity === '0.7' ? '1' : '0.7';
+                    }, 1500);
+                }
+            });
+        </script>
+    </body>
+</html>

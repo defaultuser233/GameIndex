@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--
+    This is a 🦊.
+      /\_/\    ←三角耳
+     ( o.o )   ←红眼睛
+      > ^ <
+     /     \   ←毛茸茸的身体
+    |       |
+     \_____/   ←大尾巴在后面
+      || ||    ←爪爪
+    ================================
+    https://github.com/defaultuser233
+    -->
+    <title>死亡测试</title>
+    <!-- ₍˄·͈༝·͈˄*₎◞ ̑̑ -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #000000 0%, #1a0000 100%);
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 0, 0, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(139, 0, 0, 0.1) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        .title {
+            font-size: 4rem;
+            color: #ff0000;
+            text-align: center;
+            margin: 30px 0 40px;
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.8),
+                0 0 20px rgba(255, 0, 0, 0.5),
+                0 0 30px rgba(255, 0, 0, 0.3);
+            animation: titlePulse 2s ease-in-out infinite alternate;
+            letter-spacing: 3px;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff0000, transparent);
+            animation: titleLine 3s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            from { 
+                transform: scale(1); 
+                text-shadow: 
+                    0 0 10px rgba(255, 0, 0, 0.8),
+                    0 0 20px rgba(255, 0, 0, 0.5),
+                    0 0 30px rgba(255, 0, 0, 0.3);
+            }
+            to { 
+                transform: scale(1.05); 
+                text-shadow: 
+                    0 0 15px rgba(255, 0, 0, 1),
+                    0 0 30px rgba(255, 0, 0, 0.7),
+                    0 0 45px rgba(255, 0, 0, 0.5);
+            }
+        }
+
+        @keyframes titleLine {
+            0%, 100% { width: 200px; opacity: 0.5; }
+            50% { width: 300px; opacity: 1; }
+        }
+
+        .start-container {
+            background: rgba(30, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 
+                0 0 30px rgba(255, 0, 0, 0.3),
+                inset 0 0 10px rgba(255, 0, 0, 0.1);
+            animation: cardFadeIn 0.5s ease;
+        }
+
+        .start-description {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #ffcccc;
+            margin-bottom: 30px;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+        }
+
+        .start-info {
+            color: #ff9999;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            padding: 15px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 10px;
+            border-left: 3px solid #ff0000;
+        }
+
+        .start-button {
+            background: linear-gradient(45deg, #8b0000, #ff0000);
+            color: #fff;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.4rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 20px rgba(255, 0, 0, 0.5),
+                inset 0 0 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .start-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .start-button:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 30px rgba(255, 0, 0, 0.8),
+                inset 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-button:hover::before {
+            left: 100%;
+        }
+
+        .progress-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 40px;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.3),
+                inset 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8b0000 0%, #ff0000 50%, #8b0000 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progressShine 2s infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 15px;
+            color: #ff0000;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+            font-weight: bold;
+        }
+
+        .question-card {
+            background: rgba(30, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            margin-bottom: 30px;
+            box-shadow: 
+                0 0 30px rgba(255, 0, 0, 0.3),
+                inset 0 0 10px rgba(255, 0, 0, 0.1);
+            animation: cardFadeIn 0.5s ease;
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff0000, #8b0000, #ff0000);
+            z-index: -1;
+            border-radius: 17px;
+            animation: borderGlow 3s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes cardFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #ff4d4d;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .question-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff0000, transparent);
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            background: rgba(139, 0, 0, 0.3);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.1rem;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .option:hover {
+            transform: translateX(8px);
+            background: rgba(255, 0, 0, 0.4);
+            border-color: #ff0000;
+            box-shadow: 
+                0 0 20px rgba(255, 0, 0, 0.6),
+                inset 0 0 10px rgba(255, 0, 0, 0.2);
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+
+        .option.selected {
+            background: rgba(255, 0, 0, 0.5);
+            border-color: #ff0000;
+            box-shadow: 
+                0 0 25px rgba(255, 0, 0, 0.8),
+                inset 0 0 15px rgba(255, 0, 0, 0.3);
+            transform: scale(1.02);
+        }
+
+        .result-card {
+            background: rgba(30, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ff0000;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            animation: resultPulse 1.5s ease-in-out infinite;
+            display: none;
+            box-shadow: 
+                0 0 40px rgba(255, 0, 0, 0.5),
+                inset 0 0 20px rgba(255, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at center, rgba(255, 0, 0, 0.1) 0%, transparent 70%),
+                linear-gradient(45deg, transparent 49%, rgba(255, 0, 0, 0.1) 50%, transparent 51%),
+                linear-gradient(-45deg, transparent 49%, rgba(255, 0, 0, 0.1) 50%, transparent 51%);
+            background-size: 100% 100%, 20px 20px, 20px 20px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        @keyframes resultPulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 40px rgba(255, 0, 0, 0.5),
+                    inset 0 0 20px rgba(255, 0, 0, 0.1);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 60px rgba(255, 0, 0, 0.8),
+                    inset 0 0 30px rgba(255, 0, 0, 0.2);
+            }
+        }
+
+        .result-title {
+            font-size: 2.5rem;
+            color: #ff0000;
+            margin-bottom: 25px;
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.8),
+                0 0 20px rgba(255, 0, 0, 0.5);
+            position: relative;
+            display: inline-block;
+        }
+
+        .result-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff0000, transparent);
+        }
+
+        .result-image {
+            width: 280px;
+            height: 280px;
+            border-radius: 10px;
+            margin: 20px auto;
+            border: 3px solid #ff0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .result-description {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #ffcccc;
+            margin: 20px 0;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+        }
+
+        .life-score {
+            font-size: 1.5rem;
+            color: #ff9999;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background: rgba(255, 0, 0, 0.2);
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .restart-button {
+            background: linear-gradient(45deg, #8b0000, #ff0000);
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 20px rgba(255, 0, 0, 0.5),
+                inset 0 0 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        .restart-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .restart-button:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 30px rgba(255, 0, 0, 0.8),
+                inset 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .restart-button:hover::before {
+            left: 100%;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .title {
+                font-size: 3rem;
+            }
+            
+            .question-title {
+                font-size: 1.5rem;
+            }
+            
+            .option {
+                font-size: 1rem;
+            }
+            
+            .result-image {
+                width: 200px;
+                height: 200px;
+                border-radius: 8px;
+            }
+            
+            .start-container {
+                padding: 30px 20px;
+            }
+            
+            .start-button {
+                padding: 15px 30px;
+                font-size: 1.2rem;
+            }
+        }
+        
+        /* 背景音乐开关 */
+            .bgm-switch{
+            position:fixed;
+            top:20px;
+            right:20px;
+            z-index:999;
+            width:44px;
+            height:44px;
+            border:none;
+            border-radius:50%;
+            background:rgba(255,0,0,.25);
+            color:#fff;
+            font-size:20px;
+            cursor:pointer;
+            box-shadow:0 0 10px rgba(255,0,0,.5);
+            transition:.3s;
+        }
+        .bgm-switch:hover{
+            background:rgba(255,0,0,.45);
+            transform:scale(1.1);
+        }
+        
+        /* 静音 / 出声 图标切换 */
+        .bgm-switch.on{ color:#ff0; text-shadow:0 0 8px #ff0; }
+    </style>
+    <!-- ≽^•༚• ྀི≼ -->
+</head>
+<body>
+    <h1 class="title">死亡测试</h1>
+    
+    <!-- 开始测试页面 -->
+    <div class="start-container" id="startContainer">
+        <h2 class="question-title">死亡人格测试</h2>
+        <p class="start-description">
+            这是一个测试您对生命的重视程度和面对死亡威胁时反应的测试。通过25个精心设计的情境问题，评估您的生存本能和生命态度。
+        </p>
+        <!-- (∩ᄑ_ᄑ)⊃━☆变咕呱 -->
+        <div class="start-info">
+            🩸 一个氛围感十足的暗黑风格心理小测试<br>
+            📝 测试共包含25个问题，每个问题有4个选项<br>
+            🕰️ 测试时间约需5-10分钟<br>
+            🧐 请根据第一直觉选择答案<br>
+            ⚠️ 测试仅供娱乐，无任何医学或心理学诊断意义
+        </div>
+        <!-- *⁂((✪⥎✪))⁂* -->
+        <button class="start-button" onclick="startTest()">开始测试</button>
+    </div>
+
+    <!-- 进度条 -->
+    <div class="progress-container" id="progressContainer">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">问题 1 / 25</div>
+    </div>
+
+    <!-- 问题卡片 -->
+    <div class="question-card" id="questionCard">
+        <h2 class="question-title" id="questionTitle"></h2>
+        <div class="options-container" id="optionsContainer"></div>
+    </div>
+
+    <!-- 结果卡片 -->
+    <div class="result-card" id="resultCard">
+        <h2 class="result-title" id="resultTitle">测试结果</h2>
+        <div class="result-image" id="resultImage"></div>
+        <div class="life-score" id="lifeScore"></div>
+        <p class="result-description" id="resultDescription"></p>
+        <button class="restart-button" onclick="restartTest()">重新测试</button>
+    </div>
+    <!-- ⁽⁽ଘ( ˙꒳˙ )ଓ⁾⁾ -->
+    <!-- 背景音乐 -->
+    <audio id="bgm" loop muted preload="metadata">
+        <source src="./bgm/to_the_front.ogg" type="audio/ogg">
+        如果你看到了这段文字，说明您的浏览器不支持audio标签。
+    </audio>
+        <!-- 右上角开关 -->
+        <button id="bgm-toggle" class="bgm-switch" title="背景音乐开关">🔇</button>
+    <script>
+        /* ===== 背景音乐控制 ===== */
+        const bgm = document.getElementById('bgm');
+        const btn = document.getElementById('bgm-toggle');
+        
+        // 初始状态
+        btn.textContent = '🔇';
+        
+        // 点击按钮切换音乐状态
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            
+            if (bgm.muted) {
+                // 开启音乐
+                if (bgm.paused) {
+                    // 第一次播放
+                    bgm.play().then(() => {
+                        bgm.muted = false;
+                        bgm.volume = 0.85;
+                        btn.textContent = '🔊';
+                        btn.classList.add('on');
+                    }).catch(error => {
+                        console.log('播放被阻止，需要用户交互');
+                        // 如果自动播放被阻止，提示用户先点击页面
+                        bgm.muted = false;
+                        bgm.play();
+                        btn.textContent = '🔊';
+                        btn.classList.add('on');
+                    });
+                } else {
+                    // 已经加载但被静音
+                    bgm.muted = false;
+                    btn.textContent = '🔊';
+                    btn.classList.add('on');
+                }
+            } else {
+                // 关闭音乐
+                bgm.muted = true;
+                btn.textContent = '🔇';
+                btn.classList.remove('on');
+            }
+        });
+        // 问题数据，每个选项有一个生存得分（1-4分）
+        const questions = [
+            {
+                question: "在黑暗的夜晚🌃，你独自走在回家的路上，突然听到身后有脚步声，你会？",
+                options: [
+                    { text: "😱加快脚步，快速离开", score: 4 },
+                    { text: "🧐回头看个究竟", score: 1 },
+                    { text: "😳躲到路边藏起来", score: 3 },
+                    { text: "📱假装打电话，大声说话", score: 2 }
+                ]
+            },
+            {
+                question: "如果你发现一扇通往未知的门🚪，门后传来奇怪的声音，你会？",
+                options: [
+                    { text: "🚪立即打开门查看", score: 1 },
+                    { text: "🚪先敲门询问", score: 2 },
+                    { text: "🤠找朋友一起进入", score: 3 },
+                    { text: "🚪远离这扇门", score: 4 }
+                ]
+            },
+            {
+                question: "当你照镜子🪞时，发现镜中的自己对你微笑☺️，而你没有笑😳，你会？",
+                options: [
+                    { text: "🔨立即打碎镜子", score: 4 },
+                    { text: "🏃🏻‍♂️转身逃跑", score: 3 },
+                    { text: "☺️对着镜子微笑回应", score: 2 },
+                    { text: "🙏🏻闭上眼睛默念咒语", score: 1 }
+                ]
+            },
+            {
+                question: "在废弃的医院🏥里，你听到有人在呼唤你的名字，你会？",
+                options: [
+                    { text: "🗣️回应那个声音", score: 1 },
+                    { text: "👂🏻寻找声音的来源", score: 2 },
+                    { text: "😦立即离开医院", score: 4 },
+                    { text: "📱用手机录音", score: 3 }
+                ]
+            },
+            {
+                question: "如果预知自己将在三天后死亡☠️，你会？",
+                options: [
+                    { text: "😇立即安排后事", score: 2 },
+                    { text: "🤗尽情享受剩下的时光", score: 3 },
+                    { text: "😫寻找避免死亡的方法", score: 4 },
+                    { text: "🥹告诉亲朋好友", score: 1 }
+                ]
+            },
+            {
+                question: "你在午夜接到一个未知号码的来电📲，电话里只有沉重的呼吸声，你会？",
+                options: [
+                    { text: "☎️立即挂断电话", score: 1 },
+                    { text: "🧐询问对方是谁", score: 2 },
+                    { text: "😕保持沉默听下去", score: 3 },
+                    { text: "👮🏻‍♂️立即报警", score: 4 }
+                ]
+            },
+            {
+                question: "在一个古老的墓地，你发现一块墓碑۩上刻着你的名字和今天的日期，你会？",
+                options: [
+                    { text: "😱立即离开墓地", score: 4 },
+                    { text: "🧐仔细查看墓碑细节", score: 3 },
+                    { text: "📸拍照留念", score: 2 },
+                    { text: "😶等待着看会发生什么", score: 1 }
+                ]
+            },
+            {
+                question: "在🌩️🌧️交加的夜晚，家里突然停电，你看到一个黑影从窗前闪过，你会？",
+                options: [
+                    { text: "🔪拿武器检查所有房间", score: 3 },
+                    { text: "😴躲进被子里装睡", score: 1 },
+                    { text: "📱打开手机照明查看", score: 2 },
+                    { text: "🆘立即拨打求救电话", score: 4 }
+                ]
+            },
+            {
+                question: "你做了一个连续三天的噩梦，每次都梦见自己以同样的方式死亡☠️，你会？",
+                options: [
+                    { text: "👩🏻‍⚕️寻求心理医生帮助", score: 4 },
+                    { text: "😫尝试改变梦境结局", score: 3 },
+                    { text: "😃完全不在意", score: 1 },
+                    { text: "😇告诉家人并开始写遗嘱", score: 2 }
+                ]
+            },
+            {
+                question: "在一个神秘仪式🌌中，你需要从四件物品中选择一件来保护自己，你会选？",
+                options: [
+                    { text: "✞古老的银质十字架", score: 4 },
+                    { text: "🔪刻有符文的匕首", score: 3 },
+                    { text: "🔮装满圣水的水晶瓶", score: 4 },
+                    { text: "🪨发光的黑色石头", score: 2 }
+                ]
+            },
+            // 新增的15个问题
+            {
+                question: "当你独自在家时，所有电器突然自动开启又关闭，反复几次，你会？",
+                options: [
+                    { text: "🏃‍♂️立即跑出家门", score: 4 },
+                    { text: "🔍检查电路和电器", score: 2 },
+                    { text: "🙏开始祈祷", score: 1 },
+                    { text: "📞联系物业或电力公司", score: 3 }
+                ]
+            },
+            {
+                question: "在电梯🛗里，灯光突然闪烁，电梯停在楼层之间，对讲机传来诡异的笑声，你会？",
+                options: [
+                    { text: "🔘按下所有楼层按钮", score: 3 },
+                    { text: "📱立即打电话求救", score: 4 },
+                    { text: "🗣️尝试与对讲机对话", score: 1 },
+                    { text: "🧘‍♀️坐下保持冷静", score: 2 }
+                ]
+            },
+            {
+                question: "你在旧书店发现一本封面有血手印的书📓🩸，翻开后看到自己的名字在里面，你会？",
+                options: [
+                    { text: "🔥立即烧掉这本书", score: 4 },
+                    { text: "🕵️‍♂️继续阅读探究", score: 1 },
+                    { text: "📖把书放回原处", score: 2 },
+                    { text: "👨‍⚕️带着书寻求专家帮助", score: 3 }
+                ]
+            },
+            {
+                question: "深夜独自驾车🚘时，收音机📻自动调到陌生频道，播放着关于你的死亡预告，你会？",
+                options: [
+                    { text: "📱打电话报警", score: 4 },
+                    { text: "📻调换其他频道", score: 2 },
+                    { text: "🎧仔细聆听内容", score: 1 },
+                    { text: "🔙立即掉头回家", score: 3 }
+                ]
+            },
+            {
+                question: "每次午夜12点整🕛，你的所有智能设备📱🖥️💻都会自动播放同一首悲伤的安魂曲🎶，你会？",
+                options: [
+                    { text: "⚙️格式化所有设备", score: 4 },
+                    { text: "🧐研究歌曲的来源", score: 2 },
+                    { text: "📝开始记录这一现象", score: 3 },
+                    { text: "🎧戴耳机睡觉", score: 1 }
+                ]
+            },
+            {
+                question: "你收到一封没有寄件人的信✉️，里面是手绘的你家中布局图，还有“❌”标记着你的床🛏️，你会？",
+                options: [
+                    { text: "🚔立即报警", score: 4 },
+                    { text: "📷安装监控摄像头", score: 3 },
+                    { text: "🛏️今晚去朋友家睡", score: 4 },
+                    { text: "🔍对比笔迹查找来源", score: 2 }
+                ]
+            },
+            {
+                question: "每次下雨🌧️天，你都会在窗户🪟上看到同一个孩子用手指写的🆘，但窗外无人，你会？",
+                options: [
+                    { text: "🏠立即搬家", score: 4 },
+                    { text: "👻查询房屋历史", score: 3 },
+                    { text: "📸拍照记录", score: 2 },
+                    { text: "🖐️试着回应", score: 1 }
+                ]
+            },
+            {
+                question: "你养的宠物🐶突然开始对着空无一人的角落低吼，连续数日同一时间，你会？",
+                options: [
+                    { text: "🐕带宠物看兽医", score: 3 },
+                    { text: "🧹请人来净化房屋", score: 4 },
+                    { text: "📹安装摄像机记录", score: 3 },
+                    { text: "🤫观察宠物的反应", score: 1 }
+                ]
+            },
+            {
+                question: "镜子中的你动作比你慢半拍，并且有几次对你做出你没做的表情，你会？",
+                options: [
+                    { text: "🪞砸掉所有镜子", score: 4 },
+                    { text: "📽️录像记录异常", score: 3 },
+                    { text: "👥找朋友一起验证", score: 2 },
+                    { text: "👀尝试与镜中的自己沟通", score: 1 }
+                ]
+            },
+            {
+                question: "每次经过某个路口🚏，你的电子设备都会失灵，并显示“别回头”，你会？",
+                options: [
+                    { text: "🛣️永远绕开那条路", score: 4 },
+                    { text: "🔧检查设备问题", score: 2 },
+                    { text: "👥带人一起经过", score: 3 },
+                    { text: "👀故意回头查看", score: 1 }
+                ]
+            },
+            {
+                question: "你开始每晚梦游，醒来时发现自己总在写✍🏻同一串数字，经查是某个逝者的忌日，你会？",
+                options: [
+                    { text: "🔒睡觉时锁住自己", score: 2 },
+                    { text: "📝记录所有细节", score: 3 },
+                    { text: "👨‍⚕️寻求医疗帮助", score: 4 },
+                    { text: "🕵️调查那个逝者", score: 3 }
+                ]
+            },
+            {
+                question: "所有的钟表在你家都会停在凌晨3:33，即使更换电池或换新表也一样，你会？",
+                options: [
+                    { text: "⏰全部丢掉不用钟表", score: 1 },
+                    { text: "🧐研究3:33的意义", score: 3 },
+                    { text: "⏱️尝试不同品牌钟表", score: 2 },
+                    { text: "🌙凌晨3:33保持清醒观察", score: 4 }
+                ]
+            },
+            {
+                question: "你拍的照片里总有一个模糊的人影在背景中，而且每次拍照都更靠近你一些，你会？",
+                options: [
+                    { text: "📷停止拍照", score: 4 },
+                    { text: "👻研究人影身份", score: 2 },
+                    { text: "👮‍♂️把照片交给警方", score: 4 },
+                    { text: "📸继续拍照", score: 1 }
+                ]
+            },
+            {
+                question: "你开始收到来自未来的自己发来的警告邮件📧，内容每次都更紧急⚠️，你会？",
+                options: [
+                    { text: "☺️完全忽略这些邮件", score: 1 },
+                    { text: "🔒加强网络安全", score: 2 },
+                    { text: "📧按照警告行动", score: 4 },
+                    { text: "👨‍💻追踪邮件来源", score: 3 }
+                ]
+            },
+            {
+                question: "你的影子开始有自己的行动，有时会在阳光☀️下做出与你不同的姿势，你会？",
+                options: [
+                    { text: "🌞避免阳光照射", score: 2 },
+                    { text: "🎭模仿影子的动作", score: 1 },
+                    { text: "📹录像分析影子", score: 3 },
+                    { text: "👨‍🔬寻找科学解释", score: 4 }
+                ]
+            }
+        ];
+
+        // 将根据生命重视度分数所在范围确定结果
+        const results = [
+            {
+                title: "死神使者",
+                description: "你对死亡有着特殊的感知力，经常能感受到超自然的存在。你的灵魂徘徊在生死之间，既是死神的使者，也是生者的守护者。你对死亡较为接受，认为死亡是生命的一部分。",
+                scoreRange: {min: 25, max: 50},
+                image: "./images/death-messenger.png"
+            },
+            {
+                title: "灵魂行者",
+                description: "你拥有看见灵魂的能力，能够与另一个世界沟通。你的存在连接着生死两界，是灵魂的引导者。你尊重死亡但更关注灵魂的旅程。",
+                scoreRange: {min: 51, max: 70},
+                image: "./images/soul-walker.png"
+            },
+            {
+                title: "命运挑战者",
+                description: "你勇敢地面对死亡的威胁，从不向命运低头。你的勇气和决心让你能够战胜死亡的阴影。你珍惜生命，会为生存而战。",
+                scoreRange: {min: 71, max: 85},
+                image: "./images/fate-challenger.jpg"
+            },
+            {
+                title: "生命守护者",
+                description: "你极度珍惜生命，尊重死亡，在生死之间找到了完美平衡。你是生命的坚定守护者，用爱和希望对抗死亡。你认为生命无比珍贵，会竭尽全力保护它。",
+                scoreRange: {min: 86, max: 100},
+                image: "./images/life-guardian.jpg"
+            }
+        ];
+
+        // 备用图片（如果本地图片加载失败）
+        const fallbackImages = {
+            "死神使者": "https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_1280.jpg",
+            "灵魂行者": "https://cdn.pixabay.com/photo/2016/11/29/05/45/astronomy-1867616_1280.jpg",
+            "命运挑战者": "https://cdn.pixabay.com/photo/2017/01/16/19/17/mountain-1985027_1280.jpg",
+            "生命守护者": "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg"
+        };
+
+        let currentQuestion = 0;
+        let selectedOptions = [];
+        let totalScore = 0;
+        let testStarted = false;
+
+        function startTest() {
+            testStarted = true;
+            currentQuestion = 0;
+            selectedOptions = [];
+            totalScore = 0;
+            
+            // 隐藏开始页面
+            document.getElementById('startContainer').style.display = 'none';
+            
+            // 显示测试界面
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('questionCard').style.display = 'block';
+            
+            showQuestion();
+            updateProgress();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('questionTitle').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option.text;
+                optionElement.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionElement);
+            });
+        }
+
+        function selectOption(index) {
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[index].classList.add('selected');
+
+            setTimeout(() => {
+                // 记录选择的选项和分数
+                selectedOptions.push(index);
+                totalScore += questions[currentQuestion].options[index].score;
+        
+                currentQuestion++;
+                updateProgress();
+
+                if (currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    // 等待进度条动画完成（500ms进度条动画 + 100ms缓冲）
+                    setTimeout(() => {
+                        showResult();
+                    }, 600);
+                }
+            }, 500);
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            if (currentQuestion < questions.length) {
+                document.getElementById('progressText').textContent =
+                    `问题 ${currentQuestion + 1} / ${questions.length}`;
+            } else {
+                document.getElementById('progressText').textContent =
+                    `已完成 ${questions.length} / ${questions.length}`;
+            }
+        }
+
+        function showResult() {
+            document.getElementById('questionCard').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'none';
+            
+            // 根据总分数确定结果
+            let result;
+            for (const r of results) {
+                if (totalScore >= r.scoreRange.min && totalScore <= r.scoreRange.max) {
+                    result = r;
+                    break;
+                }
+            }
+            
+            // 如果分数不在任何范围内，选择最接近的
+            if (!result) {
+                if (totalScore < 25) result = results[0];
+                else if (totalScore > 100) result = results[3];
+                else {
+                    // 找到分数最接近的结果
+                    const distances = results.map(r => 
+                        Math.min(Math.abs(totalScore - r.scoreRange.min), Math.abs(totalScore - r.scoreRange.max))
+                    );
+                    const minDistanceIndex = distances.indexOf(Math.min(...distances));
+                    result = results[minDistanceIndex];
+                }
+            }
+            
+            // 显示结果
+            document.getElementById('resultTitle').textContent = result.title;
+            document.getElementById('resultDescription').textContent = result.description;
+            document.getElementById('lifeScore').textContent = `生命重视度：${totalScore}分(满分100分)`;
+            
+            // 设置结果图片
+            const resultImage = document.getElementById('resultImage');
+            resultImage.style.backgroundImage = `url(${result.image})`;
+            
+            // 如果图片加载失败，使用备用图片
+            resultImage.onerror = function() {
+                this.style.backgroundImage = `url(${fallbackImages[result.title]})`;
+            };
+            
+            document.getElementById('resultCard').style.display = 'block';
+        }
+
+        function restartTest() {
+            document.getElementById('resultCard').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('questionCard').style.display = 'none';
+            document.getElementById('startContainer').style.display = 'block';
+        }
+
+        // 初始化显示开始页面
+        window.onload = function() {
+            document.getElementById('startContainer').style.display = 'block';
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('questionCard').style.display = 'none';
+            document.getElementById('resultCard').style.display = 'none';
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>🍽️ 今日吃什么</title>
+    <style>
+        :root{
+            --bg:linear-gradient(135deg,#f9f4e8 0%,#e8dfca 100%);
+            --card-bg:rgba(255,255,255,.65);
+            --btn-bg:linear-gradient(135deg,#a1887f 0%,#8d6e63 100%);
+            --text-dark:#5d4037;
+            --text-light:#8d6e63;
+        }
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+        body{
+            display:flex;flex-direction:column;align-items:center;justify-content:center;
+            background:var(--bg);color:var(--text-dark);overflow:hidden;
+            padding:max(2vh,12px) max(3vw,12px);
+        }
+        header{
+            text-align:center;animation:fadeInDown .8s ease-out;
+            margin-bottom:min(2.5vh,16px);
+        }
+        h1{font-size:clamp(1.8rem,5vw,2.8rem);letter-spacing:-.5px}
+        .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:var(--text-light);margin-top:4px}
+        /* 卡片区域 */
+        .cards{
+            display:flex;gap:clamp(12px,2.5vw,24px);
+            width:100%;max-width:900px;
+            justify-content:center;
+            flex-wrap:wrap;          /* PC 端横向排 */
+        }
+        /* 手机强制横向滚动（不折行） */
+        @media (max-width:600px){
+            .cards{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding-bottom:8px}
+            .cards::-webkit-scrollbar{height:4px}
+            .cards::-webkit-scrollbar-thumb{background:#c9b8ac;border-radius:2px}
+        }
+        .card{
+            flex:1 1 clamp(140px,26vw,200px);
+            max-width:clamp(140px,26vw,200px);
+            background:var(--card-bg);border-radius:20px;
+            backdrop-filter:blur(10px);box-shadow:0 6px 24px rgba(0,0,0,.06);
+            border:1px solid rgba(255,255,255,.55);
+            display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+            padding:clamp(14px,2.2vh,22px) clamp(10px,2vw,16px);
+            transition:transform .35s cubic-bezier(.175,.885,.32,1.275);
+            animation:fadeInUp .8s ease-out backwards;
+        }
+        .card:nth-child(1){animation-delay:.1s}
+        .card:nth-child(2){animation-delay:.2s}
+        .card:nth-child(3){animation-delay:.3s}
+        .card:hover{transform:translateY(-6px) scale(1.02)}
+        .icon{font-size:clamp(2.4rem,8vw,3.6rem);margin-bottom:clamp(6px,1.2vh,10px)}
+        .title{font-size:clamp(1.1rem,3vw,1.4rem);margin-bottom:clamp(8px,1.5vh,14px);font-weight:600}
+        .btn{
+            background:var(--btn-bg);color:#fff;border:none;border-radius:30px;
+            padding:clamp(8px,1.8vh,12px) clamp(18px,3.5vw,26px);
+            font-size:clamp(.9rem,2.2vw,1.05rem);cursor:pointer;transition:.25s;
+            box-shadow:0 4px 12px rgba(141,110,99,.25);
+        }
+        .btn:hover{transform:scale(1.06);box-shadow:0 6px 18px rgba(141,110,99,.35)}
+        .btn:active{transform:scale(.96)}
+        /* 弹窗 */
+        .modal{
+            position:fixed;inset:0;background:rgba(0,0,0,.45);
+            display:none;place-items:center;z-index:999;
+            backdrop-filter:blur(6px);animation:fadeIn .3s ease;
+        }
+        .modal.show{display:grid}
+        .modal-box{
+            background:var(--card-bg);border-radius:24px;padding:max(20px,3vh) max(24px,4vw);
+            width:90%;max-width:380px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.15);
+            animation:popIn .35s ease;
+        }
+        .modal-title{font-size:clamp(1.4rem,4.5vw,1.9rem);margin-bottom:min(2vh,14px)}
+        .food-img{width:clamp(120px,30vw,180px);height:clamp(120px,30vw,180px);border-radius:50%;margin:min(2vh,12px) auto}
+        .food-name{font-size:clamp(1.1rem,3.2vw,1.4rem);margin-bottom:min(2.5vh,18px);font-weight:500}
+        .close-btn{background:var(--btn-bg);color:#fff;border:none;border-radius:24px;
+                   padding:clamp(8px,1.8vh,12px) clamp(20px,4vw,28px);font-size:clamp(.9rem,2.2vw,1rem);cursor:pointer;transition:.25s}
+        .close-btn:hover{transform:scale(1.05)}
+        /* 动画 */
+        @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes popIn{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+    </style>
+</head>
+<body>
+<header>
+    <h1>🍽️ 今日吃什么</h1>
+    <p class="subtitle">让选择困难症说再见</p>
+</header>
+
+<section class="cards">
+    <div class="card">
+        <span class="icon">🌅</span>
+        <div class="title">早餐</div>
+        <button class="btn" data-meal="breakfast">随机选择</button>
+    </div>
+    <div class="card">
+        <span class="icon">☀️</span>
+        <div class="title">午餐</div>
+        <button class="btn" data-meal="lunch">随机选择</button>
+    </div>
+    <div class="card">
+        <span class="icon">🌙</span>
+        <div class="title">晚餐</div>
+        <button class="btn" data-meal="dinner">随机选择</button>
+    </div>
+</section>
+
+<!-- 弹窗 -->
+<div id="modal" class="modal">
+    <div class="modal-box">
+        <h2 class="modal-title">推荐菜品</h2>
+        <img id="foodImg" class="food-img" src="" alt="">
+        <p id="foodName" class="food-name"></p>
+        <button class="close-btn">关闭</button>
+    </div>
+</div>
+
+<script>
+const menu={
+    breakfast:[
+        {name:'豆浆油条',img:'https://images.unsplash.com/photo-1583224994076-ae951d019af7?w=400'},
+        {name:'小笼包',img:'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400'},
+        {name:'煎饼果子',img:'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400'},
+        {name:'皮蛋瘦肉粥',img:'https://images.unsplash.com/photo-1555126634-323283e090fa?w=400'},
+        {name:'鸡蛋灌饼',img:'https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400'}
+    ],
+    lunch:[
+        {name:'宫保鸡丁',img:'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=400'},
+        {name:'麻婆豆腐',img:'https://images.unsplash.com/photo-1583224994076-ae951d019af7?w=400'},
+        {name:'红烧肉',img:'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=400'},
+        {name:'糖醋排骨',img:'https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400'},
+        {name:'鱼香肉丝',img:'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400'}
+    ],
+    dinner:[
+        {name:'麻辣火锅',img:'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400'},
+        {name:'烧烤串串',img:'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400'},
+        {name:'酸菜鱼',img:'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=400'},
+        {name:'水煮肉片',img:'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=400'},
+        {name:'清蒸鲈鱼',img:'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400'}
+    ]
+};
+document.querySelectorAll('.btn').forEach(b=>b.addEventListener('click',e=>{
+    const meal=e.target.dataset.meal;
+    const arr=menu[meal],it=arr[Math.floor(Math.random()*arr.length)];
+    document.getElementById('foodName').textContent=it.name;
+    document.getElementById('foodImg').src=it.img;
+    document.getElementById('modal').classList.add('show');
+}));
+document.querySelector('.close-btn').addEventListener('click',()=>document.getElementById('modal').classList.remove('show'));
+// 点背景也可关闭
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('show')});
+</script>
+</body>
+</html>
