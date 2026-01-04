@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后室求生指南 - 第九层 · 雨后森林</title>
+    <style>
+        :root{
+            --rain:#4a7c59;      /* 雨湿绿 */
+            --mist:#d0e0f0;      /* 晨雾蓝 */
+            --mud:#5d4037;       /* 泥泞棕 */
+            --text:#e0e0e0;
+            --gold:#FFD700;
+            --blood:#ff4444;
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            background:var(--rain) url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.6' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
+            color:var(--text);
+            font-family:"Microsoft YaHei",Arial,serif;
+            line-height:1.8;
+            overflow-x:hidden;
+            animation:rainDrop 12s linear infinite;
+        }
+        @keyframes rainDrop{
+            0%,100%{background-position:0 0}
+            100%{background-position:0 240px}
+        }
+        .container{max-width:780px;margin:0 auto;padding:50px 20px;position:relative;z-index:2}
+        h1{font-size:2.8em;color:var(--gold);text-align:center;text-shadow:0 0 20px var(--gold);animation:flicker 3s infinite}
+        @keyframes flicker{0%,100%{opacity:1}50%{opacity:.8}}
+        h2{font-size:1.3em;color:#c0d0d0;text-align:center;font-weight:400;margin-bottom:40px}
+        h3{font-size:1.7em;color:var(--gold);margin:35px 0 20px;border-left:4px solid var(--gold);padding-left:12px}
+        p{margin-bottom:20px;text-indent:2em;font-size:1.1em}
+        .highlight{color:var(--gold);font-weight:bold}
+        .danger{color:var(--blood);font-weight:bold}
+        .info-box{background:rgba(255,215,0,.08);border:1px solid var(--gold);padding:20px;margin:20px 0;border-radius:5px;position:relative;overflow:hidden}
+        .info-box::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(45deg,transparent,var(--gold),transparent);animation:shimmer 3s infinite linear;z-index:-1}
+        @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+        .warning-box{background:rgba(255,68,68,.08);border:2px solid var(--blood);padding:20px;margin:20px 0;border-radius:5px;animation:pulse 2s infinite}
+        @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,68,68,.4)}70%{box-shadow:0 0 0 10px rgba(255,68,68,0)}100%{box-shadow:0 0 0 0 rgba(255,68,68,0)}}
+        .warning-icon{display:inline-block;width:30px;height:30px;background:var(--blood);color:#000;text-align:center;line-height:30px;border-radius:50%;font-weight:bold;margin-right:10px;animation:blink 1s infinite}
+        @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:.3}}
+        ul{list-style:none;padding-left:20px}
+        li{margin-bottom:10px;position:relative;padding-left:20px}
+        li::before{content:'■';position:absolute;left:0;color:var(--gold)}
+        .entity{display:inline-block;color:var(--blood);font-weight:bold;cursor:pointer;transition:all .3s ease}
+        .entity:hover{text-shadow:0 0 8px var(--blood);transform:scale(1.05)}
+        .footer{text-align:center;margin-top:60px;padding-top:20px;border-top:1px solid #333;color:#669999;font-style:italic}
+        .exit-link{display:inline-block;margin-top:25px;padding:10px 24px;border:1px solid var(--gold);color:var(--gold);text-decoration:none;border-radius:4px;transition:.3s;position:relative;overflow:hidden}
+        .exit-link::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--gold);opacity:.2;transition:left .4s}
+        .exit-link:hover{color:#000;background:var(--gold)}
+        .exit-link:hover::before{left:100%}
+        @media(max-width:600px){h1{font-size:2.2em}.chapter-title{font-size:1.8em}p{font-size:1em}}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>后室求生指南</h1>
+    <h2>第九层 · 雨后森林</h2>
+
+    <div class="chapter-title">第九层：雨后森林（The Rainforest After）</div>
+
+    <p>
+        你穿过岩缝，扑面而来的不是阳光，而是潮湿泥土与青草混合的清香。天空被低垂的雨云压成铅灰色，细密的雨丝无声地落在树冠上，汇成涓涓水流，沿着藤蔓滑落到你的肩头。整个森林像刚被洗劫后的舞台，每一片叶子都在滴水，每一步都在“滴答”作响。
+    </p>
+    <p>
+        林中没有鸟鸣，只有雨声与自己的呼吸在回荡。偶尔有风掠过，树冠层掀起一阵绿色的浪，露出更远处的朦胧山脊——可那山脊总在移动，像被无形之手悄悄拖拽。这里永远停在<span class="highlight">雨后十分钟</span>，天空从不放晴，地面从不干涸。
+    </p>
+
+    <h3>环境特征</h3>
+    <div class="info-box">
+        <ul>
+            <li><strong>气候：</strong>永恒雨后，气温18°C，湿度95%；雨势每43分钟减弱一次，露出5分钟“薄雾窗”</li>
+            <li><strong>地形：</strong>多层雨林结构，地表泥泞、树根隆起；每走200步，地势悄然下沉或抬高</li>
+            <li><strong>光照：</strong>无日照，天空呈铅灰；雨雾折射形成冷光，能见度约30米</li>
+            <li><strong>声音：</strong>雨声+水滴回声；若突然安静，说明有<span class="entity" onclick="alert('雨幕猎手：能吸收声音，接近时雨声会被吞噬')">雨幕猎手</span>靠近</li>
+            <li><strong>水体：</strong>雨水汇成临时溪沟，流向随机；踩入泥沼会<span class="danger">缓慢下沉</span>，深度未知</li>
+        </ul>
+    </div>
+
+    <h3>可用资源</h3>
+    <div class="info-box">
+        <ul>
+            <li><strong>雨帽菇：</strong>伞状荧光菌，采集后挤压可获<span class="highlight">43分钟微光</span>；过量涂抹会吸引<span class="entity" onclick="alert('菌魇：对荧光极度敏感')">菌魇</span></li>
+            <li><strong>雨水：</strong>可直接饮用，含高矿物质；过量会导致<span class="danger">幻听</span></li>
+            <li><strong>藤蔓绳：</strong>韧性极高，可制作绳索或弓弦；但割断时会<span class="danger">发出脆响</span>，引来实体</li>
+        </ul>
+    </div>
+
+    <h3>森林守则</h3>
+    <ol style="margin-left:2em;color:#ccc">
+        <li>雨声突然减弱，立即停步10秒——<span class="entity">雨幕猎手</span>正在吸声靠近。</li>
+        <li>雨帽菇只能涂<span class="highlight">双腕</span>，不可涂背——菌魇习惯从树冠扑下。</li>
+        <li>发现地面出现<strong>旋涡状落叶</strong>，切勿踏入——下方为<span class="danger">泥沼陷阱</span>，下沉速度随挣扎加剧。</li>
+        <li>每走1000步，会出现一棵<span class="highlight">倒伏巨木</span>，中空树干通向Level 10“麦田”；但巨木只在“薄雾窗”5分钟内可见。</li>
+    </ol>
+
+    <h3>实体威胁</h3>
+    <p>除前述<span class="entity">雨幕猎手</span>与<span class="entity">菌魇</span>，还有一种与雨水同色的<span class="entity" onclick="alert('雨影：透明人形，只在雨幕中移动')">雨影</span>。它们像流动的玻璃，在你眨眼时悄悄贴近；当你再次睁眼，雨影已站在你影子里，与你同步呼吸。</p>
+
+    <div class="warning-box">
+        <span class="warning-icon">!</span>
+        <strong>出口仅于“薄雾窗”开启</strong><br>
+        每43分钟雨势减弱，出现5分钟“薄雾窗”——远处可见倒伏巨木，中空树干通向Level 10“麦田”。错过窗口，必须再走1000步等下一次；若雨影已贴近，巨木将拒绝你进入。
+    </div>
+
+    <div class="footer">
+        <p>雨声永不停歇，你的脚印正在泥中被冲刷。</p>
+        <p>薄雾窗即将开启，跑，或永远留在雨后十分钟。</p>
+        <a class="exit-link" href="level9">→ 在雾窗闭合前，冲入巨木</a>
+    </div>
+</div>
+
+<script>
+/* 雨滴粒子 */
+const canvas=document.createElement("canvas");
+canvas.style.position="fixed";canvas.style.top=0;canvas.style.left=0;canvas.style.width="100%";canvas.style.height="100%";canvas.style.pointerEvents="none";canvas.style.zIndex=1;
+document.body.appendChild(canvas);
+const ctx=canvas.getContext("2d"),w=innerWidth,h=innerHeight;
+canvas.width=w;canvas.height=h;
+const drops=Array.from({length:120},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+1,s:Math.random()*4+2,life:1}));
+function fall(){ctx.clearRect(0,0,w,h);ctx.fillStyle="rgba(208,224,240,.4)";drops.forEach(d=>{d.y+=d.s;d.x+=Math.sin(d.y*0.01)*0.2;if(d.y>h){d.y=-10;d.x=Math.random()*w}ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,Math.PI*2);ctx.fill()});requestAnimationFrame(fall)}fall();
+addEventListener("resize",()=>{canvas.width=w;canvas.height=h});
+</script>
+</body>
+</html>

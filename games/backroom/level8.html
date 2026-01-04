@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后室求生指南 - 第八层 · 岩洞系统</title>
+    <style>
+        :root{
+            --cave:#1e1a17;      /* 岩褐黑 */
+            --stal:#5a4a3a;      /* 石笋棕 */
+            --glow:#66d9ef;      /* 荧光蓝 */
+            --text:#c0c0c0;
+            --gold:#FFD700;
+            --blood:#ff4444;
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            background:var(--cave) url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.6' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
+            color:var(--text);
+            font-family:"Microsoft YaHei",Arial,serif;
+            line-height:1.8;
+            overflow-x:hidden;
+            animation:rock 16s ease-in-out infinite;
+        }
+        @keyframes rock{
+            0%,100%{transform:translateY(0)}
+            50%{transform:translateY(2px)}
+        }
+        .container{max-width:780px;margin:0 auto;padding:50px 20px;position:relative;z-index:2}
+        h1{font-size:2.8em;color:var(--glow);text-align:center;text-shadow:0 0 15px var(--glow);animation:drip 3s infinite alternate}
+        @keyframes drip{0%{text-shadow:0 0 10px var(--glow)}100%{text-shadow:0 0 25px var(--glow)}}
+        h2{font-size:1.3em;color:#88b8b8;text-align:center;font-weight:400;margin-bottom:40px}
+        h3{font-size:1.7em;color:var(--glow);margin:35px 0 18px;border-left:4px solid var(--glow);padding-left:12px}
+        p{margin-bottom:20px;text-indent:2em;font-size:1.1em}
+        .highlight{color:var(--gold);font-weight:bold}
+        .danger{color:var(--blood);font-weight:bold}
+        .info-box{background:rgba(102,217,239,.08);border:1px solid var(--glow);padding:20px;margin:22px 0;border-radius:6px;position:relative;overflow:hidden}
+        .info-box::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--glow),transparent);opacity:.5;animation:flow 3s linear infinite}
+        @keyframes flow{to{left:100%}}
+        .warning-box{background:rgba(255,68,68,.08);border:2px solid var(--blood);padding:20px;margin:22px 0;border-radius:6px;animation:throb 1.4s infinite}
+        @keyframes throb{0%,100%{box-shadow:inset 0 0 0 0 rgba(255,68,68,.3)}50%{box-shadow:inset 0 0 15px 8px rgba(255,68,68,0)}}
+        .warning-icon{display:inline-block;width:28px;height:28px;background:var(--blood);color:#000;text-align:center;line-height:28px;border-radius:50%;font-weight:bold;margin-right:10px;animation:blink 1s infinite}
+        @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:.3}}
+        ul{list-style:none;padding-left:20px}
+        li{margin-bottom:10px;position:relative;padding-left:20px}
+        li::before{content:'■';position:absolute;left:0;color:var(--glow)}
+        .entity{display:inline-block;color:var(--blood);font-weight:bold;cursor:pointer;transition:.3s}
+        .entity:hover{text-shadow:0 0 10px var(--blood);transform:scale(1.06)}
+        .footer{text-align:center;margin-top:60px;padding-top:20px;border-top:1px solid #2a4b4b;color:#669999;font-style:italic}
+        .exit-link{display:inline-block;margin-top:25px;padding:10px 24px;border:1px solid var(--gold);color:var(--gold);text-decoration:none;border-radius:4px;transition:.3s;position:relative;overflow:hidden}
+        .exit-link::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--gold);opacity:.2;transition:left .4s}
+        .exit-link:hover{color:#000;background:var(--gold)}
+        .exit-link:hover::before{left:100%}
+        @media(max-width:600px){h1{font-size:2.2em}h3{font-size:1.5em}p{font-size:1em}}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>后室求生指南</h1>
+    <h2>第八层 · 岩洞系统</h2>
+
+    <h3>第八层：岩洞系统（The Cave System）</h3>
+
+    <p>
+        你跌出升降梯，砸在冰冷潮湿的岩地上。头顶是千疮百孔的钟乳石穹顶，偶尔有水滴坠落，在寂静中发出清脆的“滴答”——像倒计时。空气带着硝石与霉木的味道，每一次呼吸都能听见自己的回声被岩壁反复折叠，仿佛整个洞穴正在<span class="highlight">模仿你的存在</span>。
+    </p>
+    <p>
+        洞穴没有地图。石笋像獠牙一样从地面突起，稍不留神就会划破小腿。远处传来低沉的滴水声与风啸，偶尔夹杂岩石摩擦的“咔啦”——那是岩层在移动，还是别的什么东西在巡游？
+    </p>
+
+    <h3>环境特征</h3>
+    <div class="info-box">
+        <ul>
+            <li><strong>空间结构：</strong>非对称溶洞迷宫，分干洞、湿洞、竖井三层；每走200步，岩道会在你背后悄然移位</li>
+            <li><strong>照明：</strong>零自然光；岩壁偶见荧光苔，提供不足0.1 lux微光；完全黑暗占99%时间</li>
+            <li><strong>地面：</strong>碎石+钟乳石笋，高低落差大；湿洞区积水至脚踝，水温6°C，踩空会坠入<span class="danger">竖井</span>，深度未知</li>
+            <li><strong>声音：</strong>滴水回声+岩层摩擦；回声延迟=你的步频×3；若突然不同步，说明岩道已移位</li>
+            <li><strong>温度：</strong>干洞12°C，湿洞8°C；越接近“荧光湖”体感越冷，最低可降至-2°C</li>
+        </ul>
+    </div>
+
+    <h3>可用资源</h3>
+    <div class="info-box">
+        <ul>
+            <li><strong>荧光苔：</strong>贴岩壁生长，采集后捏碎可涂在身上，提供<span class="highlight">43分钟微光</span>；过量涂抹会吸引<span class="entity" onclick="alert('岩噬体：对荧光极度敏感')">岩噬体</span></li>
+            <li><strong>岩笋水：</strong>从钟乳石滴落，可直接饮用；含高矿物质，过量会导致<span class="danger">幻听</span></li>
+            <li><strong>岩钉靴：</strong>罕见，鞋头嵌铁钉，可防滑并踢碎石笋；但脚步声会<span class="danger">放大三倍</span></li>
+        </ul>
+    </div>
+
+    <h3>岩洞守则</h3>
+    <ol style="margin-left:2em;color:#ccc">
+        <li>保持脚步声节奏；若听见第二套脚步，立即停步10秒，让“它”先通过。</li>
+        <li>荧光苔只能涂<span class="highlight">双腕</span>，不可涂背——岩噬体习惯从上方扑下。</li>
+        <li>发现岩壁出现<strong>新鲜凿痕</strong>，切勿触碰；凿痕会在下一圈“愈合”，并把触碰者<span class="danger">指纹留在内部</span>。</li>
+        <li>每走1000步，会出现一道竖直“岩缝”出口，持续<span class="highlight">43分钟</span>；错过则再等1000步。</li>
+    </ol>
+
+    <h3>实体威胁</h3>
+    <p>除前述<span class="entity">岩噬体</span>，还有一种与岩壁同色的<span class="entity" onclick="alert('岩皮者：贴岩滑行，移动时剥落碎石')">岩皮者</span>。它们像流动的石皮，在你转身时悄悄贴近；当你再次回头，岩壁已恢复平整，仿佛从未移动。</p>
+
+    <div class="warning-box">
+        <span class="warning-icon">!</span>
+        <strong>出口仅于“岩缝”开启</strong><br>
+        每走1000步，会出现一道竖直“岩缝”（高3米，宽40cm），持续<span class="highlight">43分钟</span>。穿过即抵达Level 9“郊区”干燥平台。错过岩缝，必须再走1000步等下一道；若岩皮者已贴近，岩缝将拒绝你。
+    </div>
+
+    <div class="footer">
+        <p>岩层在呼吸，水滴在倒计时。</p>
+        <p>1000步一闪，岩缝已现——爬，或永远成为岩壁的一部分。</p>
+        <a class="exit-link" href="level9.html">→ 在岩缝闭合前，钻入出口</a>
+    </div>
+</div>
+
+<script>
+/* 水滴回声粒子 */
+const canvas=document.createElement("canvas");
+canvas.style.position="fixed";canvas.style.top=0;canvas.style.left=0;canvas.style.width="100%";canvas.style.height="100%";canvas.style.pointerEvents="none";canvas.style.zIndex=1;
+document.body.appendChild(canvas);
+const ctx=canvas.getContext("2d"),w=innerWidth,h=innerHeight;
+canvas.width=w;canvas.height=h;
+const drops=Array.from({length:60},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.2+1,s:Math.random()*1.5+0.5,life:1}));
+function fall(){ctx.clearRect(0,0,w,h);ctx.fillStyle="rgba(102,217,239,.6)";drops.forEach(d=>{d.y+=d.s;d.x+=Math.sin(d.y*0.02)*0.3;if(d.y>h){d.y=-10;d.x=Math.random()*w}ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,Math.PI*2);ctx.fill()});requestAnimationFrame(fall)}fall();
+addEventListener("resize",()=>{canvas.width=w;canvas.height=h});
+</script>
+</body>
+</html>
