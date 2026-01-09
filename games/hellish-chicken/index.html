@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>地狱厨房：黑暗料理 PLUS 猎奇版</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <h1 class="main-title">🔥 地狱厨房：猎奇料理 PRO</h1>
+  <div class="top-bar">
+    <div>⏰ 时间: <span id="time">60</span></div>
+    <div class="combo">🔥 连击: <span id="combo">0</span></div>
+    <div class="score">💯 得分: <span id="score">0</span></div>
+    <div class="lives">❤️ 生命: <span id="lives">3</span></div>
+  </div>
+
+  <div class="game-area">
+    <!-- ===== 烹饪区 ===== -->
+    <div class="panel">
+      <h2 class="section-title">🍳 烹饪区</h2>
+      <div class="ingredients" id="ingredients"></div>
+      <div class="pot-area">
+        <div class="fire-bar"><div class="fire-bar-inner" id="fireBar"></div></div>
+        <div class="pot" id="pot">选择食材</div>
+        <div class="controls">
+          <button class="btn btn-fire" id="addFire">🔥 加火</button>
+          <button class="btn btn-serve" id="serveBtn">🪤 上菜</button>
+          <button class="btn btn-reset" id="resetBtn">🗑️ 重做</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 订单区 ===== -->
+    <div class="panel">
+      <h2 class="section-title">👥 顾客订单</h2>
+      <div id="orders"></div>
+    </div>
+  </div>
+
+  <div class="recipe-book">
+    <h2 class="section-title">📖 黑暗菜谱大全</h2>
+    <div class="recipe-grid" id="recipeGrid"></div>
+  </div>
+</div>
+
+<div class="game-over" id="gameOver">
+  <div id="overText"></div>
+  <button onclick="location.reload()">重新开始</button>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>

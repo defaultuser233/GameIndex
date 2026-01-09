@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>隐形墙迷宫</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+    background:linear-gradient(135deg,#2c0a0a 0%,#4a0f0f 100%);
+    color:#fff;font-family:'Microsoft YaHei',sans-serif;
+    display:flex;justify-content:center;align-items:center;
+    min-height:100vh;overflow:hidden;
+}
+.game-container{text-align:center;padding:15px;background:rgba(0,0,0,.3);
+border-radius:15px;box-shadow:0 0 30px rgba(255,0,0,.3);max-width:98vw}
+h1{margin-bottom:10px;font-size:2em;text-shadow:0 0 10px rgba(255,0,0,.5);
+animation:glow 2s ease-in-out infinite alternate}
+@keyframes glow{from{text-shadow:0 0 10px rgba(255,0,0,.5)}to{text-shadow:0 0 20px rgba(255,0,0,.8)}}
+.game-board{display:grid;grid-template-columns:repeat(10,8vw);
+grid-template-rows:repeat(10,8vw);gap:1vw;margin:10px auto;
+background:rgba(0,0,0,.5);padding:2vw;border-radius:10px}
+.cell{width:8vw;height:8vw;background:#333;border:1px solid #555;
+display:flex;justify-content:center;align-items:center;font-size:6vw;transition:all .3s}
+.player{background:#4CAF50!important;border-radius:50%;animation:pulse 1s infinite}
+.enemy{background:#f44336!important;border-radius:50%;animation:enemyMove 2s infinite}
+.wall{background:#666!important;border:2px solid #888}
+.item{background:#FFD700!important;border-radius:5px;animation:itemGlow 1.5s infinite}
+.exit{background:#2196F3!important;border-radius:5px;animation:exitPulse 1s infinite}
+.hidden-wall{background:#333!important;border:1px solid #555}
+.revealed-wall{background:#666!important;border:2px solid #888;animation:wallReveal .5s}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes enemyMove{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes itemGlow{0%,100%{box-shadow:0 0 5px #FFD700}50%{box-shadow:0 0 15px #FFD700}}
+@keyframes exitPulse{0%,100%{opacity:.8}50%{opacity:1}}
+@keyframes wallReveal{0%{transform:scale(.8);opacity:.5}100%{transform:scale(1);opacity:1}}
+.controls{margin:10px 0}
+button{background:linear-gradient(45deg,#d32f2f,#b71c1c);color:#fff;border:none;
+padding:10px 18px;margin:0 5px;border-radius:20px;font-size:14px;box-shadow:0 4px 15px rgba(211,47,47,.3)}
+button:active{transform:scale(.95)}
+.game-info{font-size:14px;margin:8px 0}
+.level{color:#4CAF50;font-weight:bold}
+.status{color:#FFD700;margin-left:15px}
+.instructions{font-size:12px;color:#ccc;margin-top:5px}
+
+/* ===== 触控方向键 ===== */
+.dpad{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+width:160px;height:160px;display:grid;grid-template:1fr 1fr 1fr/1fr 1fr 1fr;
+gap:5px;user-select:none}
+.dpad div{background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);
+border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:24px}
+.dpad div:active{background:rgba(255,255,255,.3)}
+.dpad .up{grid-area:1/2} .dpad .left{grid-area:2/1}
+.dpad .right{grid-area:2/3} .dpad .down{grid-area:3/2}
+
+/* 新增：控制区不再被方向键压住 */
+body{padding-bottom:180px}
+</style>
+</head>
+<body>
+<div class="game-container">
+    <h1>隐形墙迷宫</h1>
+    <div class="game-info">
+        <span class="level">关卡：<span id="level">1</span></span>
+        <span class="status">状态：<span id="status">准备开始</span></span>
+    </div>
+    <div class="game-board" id="gameBoard"></div>
+    <div class="controls">
+        <button id="startBtn" onclick="startGame()">开始游戏</button>
+        <button id="useItemBtn" onclick="useItem()">使用道具</button>
+    </div>
+    <div class="instructions">点击方向键移动 | 避开红色敌人 | 收集道具 | 到达蓝色出口</div>
+</div>
+
+<!-- 屏幕方向键 -->
+<div class="dpad">
+    <div class="up" data-dir="up">▲</div>
+    <div class="left" data-dir="left">◀</div>
+    <div class="right" data-dir="right">▶</div>
+    <div class="down" data-dir="down">▼</div>
+</div>
+
+<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);display:none;justify-content:center;align-items:center;z-index:1000" id="victoryScreen">
+    <div style="text-align:center;animation:victoryBounce 1s ease-out">
+        <div style="font-size:10vw;color:#FFD700;margin-bottom:20px;text-shadow:0 0 20px rgba(255,215,0,.8)">🎉 恭喜通关！🎉</div>
+        <button onclick="nextLevel()">下一关</button>
+        <button onclick="restartGame()">重新开始</button>
+    </div>
+</div>
+
+<script>
+let gameState={
+    board:[],player:{x:0,y:0},enemies:[],items:[],exit:{x:9,y:9},
+    level:1,gameActive:false,itemsCollected:0,
+    revealedWallCells:new Set()   // 只记录已撞到的墙
+};
+const levels=[
+    {player:{x:0,y:0},enemies:[{x:3,y:3},{x:7,y:5}],items:[{x:2,y:2},{x:5,y:7}],exit:{x:9,y:9},
+     walls:[{x:1,y:1},{x:1,y:2},{x:2,y:1},{x:4,y:4},{x:4,y:5},{x:5,y:4},{x:6,y:6},{x:7,y:6},{x:8,y:6}]},
+    {player:{x:0,y:0},enemies:[{x:2,y:2},{x:5,y:5},{x:8,y:3}],items:[{x:1,y:8},{x:4,y:1},{x:7,y:7}],exit:{x:9,y:9},
+     walls:[{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:3,y:3},{x:3,y:4},{x:3,y:5},{x:6,y:2},{x:6,y:3},{x:6,y:4},{x:8,y:7},{x:8,y:8}]}
+];
+
+function initGame(){
+    const board=document.getElementById('gameBoard');
+    board.innerHTML='';gameState.board=[];
+    for(let y=0;y<10;y++){
+        gameState.board[y]=[];
+        for(let x=0;x<10;x++){
+            const c=document.createElement('div');c.className='cell';c.id=`cell-${x}-${y}`;board.appendChild(c);
+            gameState.board[y][x]=c;
+        }
+    }
+    loadLevel(gameState.level);
+}
+function loadLevel(n){
+    if(n>levels.length){showVictory();return;}
+    const L=levels[n-1];
+    Object.assign(gameState,{
+        player:{...L.player},enemies:[...L.enemies],items:[...L.items],exit:{...L.exit},walls:[...L.walls],
+        itemsCollected:0, revealedWallCells:new Set()
+    });
+    updateDisplay();document.getElementById('level').textContent=n;document.getElementById('status').textContent='游戏进行中';
+}
+function updateDisplay(){
+    // 先全部置空
+    for(let y=0;y<10;y++)for(let x=0;x<10;x++){const c=gameState.board[y][x];c.className='cell';c.textContent='';}
+    // 隐形墙：只有被撞过的才显示
+    gameState.walls.forEach(w=>{
+        const key=`${w.x},${w.y}`;
+        const c=gameState.board[w.y][w.x];
+        if(gameState.revealedWallCells.has(key)) c.className='cell revealed-wall';
+        else c.className='cell hidden-wall';
+    });
+    // 其余元素
+    gameState.items.forEach(it=>{const c=gameState.board[it.y][it.x];c.className='cell item';c.textContent='💎';});
+    gameState.enemies.forEach(e=>{const c=gameState.board[e.y][e.x];c.className='cell enemy';c.textContent='👹';});
+    const ex=gameState.board[gameState.exit.y][gameState.exit.x];ex.className='cell exit';ex.textContent='🚪';
+    const p=gameState.board[gameState.player.y][gameState.player.x];p.className='cell player';p.textContent='😊';
+}
+function movePlayer(dx,dy){
+    if(!gameState.gameActive)return;
+    const nx=gameState.player.x+dx,ny=gameState.player.y+dy;
+    if(nx<0||nx>9||ny<0||ny>9)return;
+    const wall=gameState.walls.find(w=>w.x===nx&&w.y===ny);
+    if(wall){
+        // 撞到墙：仅把这面墙显形1秒
+        const key=`${nx},${ny}`;
+        gameState.revealedWallCells.add(key);
+        updateDisplay();
+        setTimeout(()=>{gameState.revealedWallCells.delete(key);updateDisplay();},1000);
+        return;
+    }
+    gameState.player.x=nx;gameState.player.y=ny;
+    const itIdx=gameState.items.findIndex(it=>it.x===nx&&it.y===ny);
+    if(itIdx!==-1){gameState.items.splice(itIdx,1);gameState.itemsCollected++;document.getElementById('status').textContent='获得道具！';setTimeout(()=>{document.getElementById('status').textContent='游戏进行中';},1000);}
+    if(gameState.enemies.some(e=>e.x===nx&&e.y===ny)){gameOver();return;}
+    if(nx===gameState.exit.x&&ny===gameState.exit.y){levelComplete();return;}
+    updateDisplay();
+}
+function moveEnemies(){if(!gameState.gameActive)return;
+    gameState.enemies.forEach(e=>{
+        const dirs=[{dx:0,dy:-1},{dx:1,dy:0},{dx:0,dy:1},{dx:-1,dy:0}];
+        const d=dirs[Math.floor(Math.random()*4)];
+        const nx=e.x+d.dx,ny=e.y+d.dy;
+        if(nx>=0&&nx<10&&ny>=0&&ny<10&&!gameState.walls.some(w=>w.x===nx&&w.y===ny)){e.x=nx;e.y=ny;}
+    });
+    if(gameState.enemies.some(e=>e.x===gameState.player.x&&e.y===gameState.player.y)){gameOver();return;}
+    updateDisplay();
+}
+function startGame(){
+    if(gameState.gameActive)return;
+    gameState.gameActive=true;document.getElementById('status').textContent='游戏进行中';
+    // 按钮文案切换
+    const btn=document.getElementById('startBtn');
+    btn.textContent='重新开始';btn.onclick=restartGame;
+    setInterval(()=>{if(gameState.gameActive)moveEnemies();},1000);
+}
+function resetLevel(){/* 已移除界面按钮，逻辑保留供内部调用 */loadLevel(gameState.level);}
+function useItem(){
+    if(gameState.itemsCollected>0){
+        gameState.itemsCollected--;
+        // 使用道具：把所有墙显形3秒
+        gameState.walls.forEach(w=>gameState.revealedWallCells.add(`${w.x},${w.y}`));
+        updateDisplay();document.getElementById('status').textContent='道具：全图显墙3秒';
+        setTimeout(()=>{
+            gameState.revealedWallCells.clear();
+            document.getElementById('status').textContent='游戏进行中';updateDisplay();
+        },3000);
+    }
+}
+function levelComplete(){gameState.gameActive=false;document.getElementById('status').textContent='关卡完成！';showVictory();}
+function gameOver(){gameState.gameActive=false;document.getElementById('status').textContent='游戏结束！';alert('你被敌人抓住了！重新开始本关卡。');setTimeout(restartGame,1000);}
+function showVictory(){document.getElementById('victoryScreen').style.display='flex';}
+function nextLevel(){document.getElementById('victoryScreen').style.display='none';gameState.level++;gameState.gameActive=true;loadLevel(gameState.level);}
+function restartGame(){
+    document.getElementById('victoryScreen').style.display='none';
+    gameState.level=1;gameState.gameActive=false;
+    // 恢复按钮文字
+    const btn=document.getElementById('startBtn');
+    btn.textContent='开始游戏';btn.onclick=startGame;
+    loadLevel(1);
+}
+
+/* ===== 触控方向键 ===== */
+document.querySelectorAll('.dpad div').forEach(btn=>{
+    btn.addEventListener('touchstart',e=>{e.preventDefault();handleDir(btn.dataset.dir)});
+    btn.addEventListener('click',e=>handleDir(btn.dataset.dir));
+});
+function handleDir(d){
+    switch(d){
+        case 'up':movePlayer(0,-1);break;
+        case 'down':movePlayer(0,1);break;
+        case 'left':movePlayer(-1,0);break;
+        case 'right':movePlayer(1,0);break;
+    }
+}
+initGame();
+</script>
+</body>
+</html>
