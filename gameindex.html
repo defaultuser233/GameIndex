@@ -12,8 +12,10 @@
         }
         body {
             font-family: 'Microsoft YaHei', Arial, sans-serif;
-            background-color: #DE4A14;
+            /* 网页背景改为background.png */
+            background: url('./images/background.png') center/cover no-repeat fixed;
             padding: 40px 20px;
+            min-height: 100vh;
         }
         /* 顶部 GameIndex 文字 */
         .top-title {
@@ -25,7 +27,7 @@
             letter-spacing: 2px;
             text-shadow: 0 2px 8px rgba(0, 0, 0, .4);
         }
-        /* 主卡片：带背景图 + 遮罩 */
+        /* 主卡片：改为半透明背景 */
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -34,19 +36,13 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, .15);
             padding: 40px;
             overflow: hidden;
-            background: url('./images/background.png') center/cover no-repeat;
+            /* 卡片背景改为半透明 */
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(5px); /* 可选：添加毛玻璃效果，增强半透明感 */
         }
+        /* 移除原有的遮罩层，因为现在卡片本身就是半透明的 */
         .container::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, .45); /* 遮罩层，可调透明度 */
-            z-index: 1;
-        }
-        /* 保证内容在遮罩上方 */
-        .container > * {
-            position: relative;
-            z-index: 2;
+            display: none;
         }
         h1 {
             text-align: center;
